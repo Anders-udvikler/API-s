@@ -1,3 +1,4 @@
+using Auhtors;
 using Microsoft.Data.SqlClient;
 
 namespace AuthorsRepo
@@ -34,7 +35,9 @@ namespace AuthorsRepo
                             {
                                 Id = (int)reader["Id"],
                                 Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Surname = reader["Country"].ToString(),
+                                PublishingCompanyId = Convert.ToInt32(reader["publishingcompany"]),
+                                PublishingYear = Convert.ToInt32(reader["publishingyear"])
                             };
                         }
                     }
@@ -43,25 +46,29 @@ namespace AuthorsRepo
             }
         }
 
-        public publishingcompany AddPublishingCompany(publishingcompany company)
+        public Author AddAuthor(Author author)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 using (var command = new SqlCommand(querygetAdd, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", company.Id);
-                    command.Parameters.AddWithValue("@Name", company.Name);
-                    command.Parameters.AddWithValue("@Country", company.Country);
+                    command.Parameters.AddWithValue("@Id", author.Id);
+                    command.Parameters.AddWithValue("@Name", author.Name);
+                    command.Parameters.AddWithValue("@Surname", author.Surname);
+                    command.Parameters.AddWithValue("@PublishingCompanyId", author.PublishingCompanyId);
+                    command.Parameters.AddWithValue("@Publishingyear", author.Publishingyear);
                     using (var reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            return new publishingcompany
+                            return new Author
                             {
                                 Id = (int)reader["Id"],
                                 Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Surname = reader["Country"].ToString(),
+                                PublishingCompanyId = Convert.ToInt32(reader["publishingcompany"]),
+                                PublishingYear = Convert.ToInt32(reader["publishingyear"])
                             };
                         }
                     }
@@ -71,7 +78,7 @@ namespace AuthorsRepo
         }
     }
 
-        public publishingcompany UpdatePublishingCompany(publishingcompany company, int id)
+        public Author UpdateAuthor(Author author, int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -79,17 +86,19 @@ namespace AuthorsRepo
                 using (var command = new SqlCommand(querygetUpdate, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
-                    command.Parameters.AddWithValue("@Name", company.Name);
-                    command.Parameters.AddWithValue("@Country", company.Country);
+                    command.Parameters.AddWithValue("@Name", author.Name);
+                    command.Parameters.AddWithValue("@Country", author.Country);
                     using (var reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            return new publishingcompany
+                            return new Author
                             {
                                 Id = (int)reader["Id"],
                                 Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Surname = reader["Country"].ToString()
+                                publishingcompanyid = reader["publishingcompany"].ToString()
+                                publishingyear = reader["publishingyear"].ToString()     
                             };
                         }
                     }
@@ -98,7 +107,7 @@ namespace AuthorsRepo
         }
     }
 
-        public async Task DeletePublishingCompany(int id)
+        public async Task DeleteAuthor(int id)
         {
 
             using (var connection = new SqlConnection(_connectionString))
@@ -114,7 +123,7 @@ namespace AuthorsRepo
            }
         }
 
-        public List<publishingcompany> GetPublishingCompanyById(int id)
+        public List<Author> GetAuthorsById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -126,11 +135,13 @@ namespace AuthorsRepo
                     {
                         if (reader.Read())
                         {
-                            return new publishingcompany
+                            return new Author
                             {
                                 Id = (int)reader["Id"],
                                 Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Surname = reader["Country"].ToString(),
+                                PublishingCompanyId = reader["publishingcompany"].ToString(),
+                                PublishingYear = reader["publishingyear"].ToString()
                             };
                         }
                     }
