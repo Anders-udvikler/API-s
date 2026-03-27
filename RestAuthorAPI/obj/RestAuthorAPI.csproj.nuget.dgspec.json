@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ander\\OneDrive\\Dokumenter\\API's\\RestAuthorAPI\\RestAuthorAPI.csproj": {}
+    "C:\\Users\\allil\\Documents\\school\\System Integration\\madatory 1\\API-s\\RestAuthorAPI\\RestAuthorAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ander\\OneDrive\\Dokumenter\\API's\\RestAuthorAPI\\RestAuthorAPI.csproj": {
+    "C:\\Users\\allil\\Documents\\school\\System Integration\\madatory 1\\API-s\\RestAuthorAPI\\RestAuthorAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ander\\OneDrive\\Dokumenter\\API's\\RestAuthorAPI\\RestAuthorAPI.csproj",
+        "projectUniqueName": "C:\\Users\\allil\\Documents\\school\\System Integration\\madatory 1\\API-s\\RestAuthorAPI\\RestAuthorAPI.csproj",
         "projectName": "RestAuthorAPI",
-        "projectPath": "C:\\Users\\ander\\OneDrive\\Dokumenter\\API's\\RestAuthorAPI\\RestAuthorAPI.csproj",
-        "packagesPath": "C:\\Users\\ander\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ander\\OneDrive\\Dokumenter\\API's\\RestAuthorAPI\\obj\\",
+        "projectPath": "C:\\Users\\allil\\Documents\\school\\System Integration\\madatory 1\\API-s\\RestAuthorAPI\\RestAuthorAPI.csproj",
+        "packagesPath": "C:\\Users\\allil\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\allil\\Documents\\school\\System Integration\\madatory 1\\API-s\\RestAuthorAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\ander\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\allil\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -45,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net10.0": {
@@ -79,7 +78,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

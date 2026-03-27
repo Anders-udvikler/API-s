@@ -1,11 +1,27 @@
 {
   "version": 2,
-  "dgSpecHash": "YluXX7DD/3M=",
+  "dgSpecHash": "5R40n5wHh48=",
   "success": true,
-  "projectFilePath": "C:\\Users\\ander\\OneDrive\\Dokumenter\\API's\\GRPAuthorAPI\\GRPAuthorAPI.csproj",
+  "projectFilePath": "C:\\Users\\allil\\Documents\\school\\System Integration\\madatory 1\\API-s\\GRPAuthorAPI\\GRPAuthorAPI.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ander\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.3\\microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
-    "C:\\Users\\ander\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+    "C:\\Users\\allil\\.nuget\\packages\\grpc\\2.23.0\\grpc.2.23.0.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\grpc.aspnetcore.server\\2.57.0\\grpc.aspnetcore.server.2.57.0.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\grpc.core\\2.23.0\\grpc.core.2.23.0.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\grpc.core.api\\2.57.0\\grpc.core.api.2.57.0.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\grpc.net.common\\2.57.0\\grpc.net.common.2.57.0.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\magiconion\\3.0.13\\magiconion.3.0.13.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\magiconion.abstractions\\7.10.0\\magiconion.abstractions.7.10.0.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\magiconion.hosting\\3.0.13\\magiconion.hosting.3.0.13.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\magiconion.serialization.messagepack\\7.10.0\\magiconion.serialization.messagepack.7.10.0.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\magiconion.server\\7.10.0\\magiconion.server.7.10.0.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\magiconion.shared\\7.10.0\\magiconion.shared.7.10.0.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\messagepack\\3.1.4\\messagepack.3.1.4.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\messagepack.annotations\\3.1.4\\messagepack.annotations.3.1.4.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\messagepackanalyzer\\3.1.4\\messagepackanalyzer.3.1.4.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.3\\microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\microsoft.net.stringtools\\17.11.4\\microsoft.net.stringtools.17.11.4.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512",
+    "C:\\Users\\allil\\.nuget\\packages\\multicaster\\2.1.1\\multicaster.2.1.1.nupkg.sha512"
   ],
   "logs": []
 }
