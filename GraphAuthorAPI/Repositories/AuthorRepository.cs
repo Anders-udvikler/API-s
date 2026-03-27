@@ -5,12 +5,11 @@ namespace AuthorsRepo
 {
     public class AuthorRepo
     {
-        string querygetall = "";
-        string querygetid = "";
-        string querygetAdd = "";
-        string querygetDelete = "";
-
-        string querygetUpdate = "";
+        string querygetall = "select * from authors";
+        string querygetid = "select * from authors where Id = @Id";
+        string querygetAdd = "insert into authors (Id, Name, Surname) values (@Id, @Name, @Surname)";
+        string querygetDelete = "delete from authors where Id = @Id";
+        string querygetUpdate = "update authors set Name = @Name, Surname = @Surname where Id = @Id";
 
         private readonly string _connectionString;
 
@@ -19,7 +18,7 @@ namespace AuthorsRepo
             _connectionString = connectionString;
         }
 
-        public AuthorRepo GetAuthorRepoById(int id)
+        public Author GetAuthorRepoById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -35,9 +34,7 @@ namespace AuthorsRepo
                             {
                                 Id = (int)reader["Id"],
                                 Name = reader["Name"].ToString(),
-                                Surname = reader["Country"].ToString(),
-                                PublishingCompanyId = Convert.ToInt32(reader["publishingcompany"]),
-                                PublishingYear = Convert.ToInt32(reader["publishingyear"])
+                                Surname = reader["Country"].ToString()
                             };
                         }
                     }
@@ -56,8 +53,6 @@ namespace AuthorsRepo
                     command.Parameters.AddWithValue("@Id", author.Id);
                     command.Parameters.AddWithValue("@Name", author.Name);
                     command.Parameters.AddWithValue("@Surname", author.Surname);
-                    command.Parameters.AddWithValue("@PublishingCompanyId", author.PublishingCompanyId);
-                    command.Parameters.AddWithValue("@Publishingyear", author.Publishingyear);
                     using (var reader = command.ExecuteReader())
                     {
                         if (reader.Read())
@@ -66,9 +61,7 @@ namespace AuthorsRepo
                             {
                                 Id = (int)reader["Id"],
                                 Name = reader["Name"].ToString(),
-                                Surname = reader["Country"].ToString(),
-                                PublishingCompanyId = Convert.ToInt32(reader["publishingcompany"]),
-                                PublishingYear = Convert.ToInt32(reader["publishingyear"])
+                                Surname = reader["Country"].ToString()
                             };
                         }
                     }
@@ -87,7 +80,7 @@ namespace AuthorsRepo
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     command.Parameters.AddWithValue("@Name", author.Name);
-                    command.Parameters.AddWithValue("@Country", author.Country);
+                    command.Parameters.AddWithValue("@Surname", author.Surname);
                     using (var reader = command.ExecuteReader())
                     {
                         if (reader.Read())
@@ -96,9 +89,7 @@ namespace AuthorsRepo
                             {
                                 Id = (int)reader["Id"],
                                 Name = reader["Name"].ToString(),
-                                Surname = reader["Country"].ToString()
-                                publishingcompanyid = reader["publishingcompany"].ToString()
-                                publishingyear = reader["publishingyear"].ToString()     
+                                Surname = reader["Surname"].ToString()
                             };
                         }
                     }
@@ -123,7 +114,7 @@ namespace AuthorsRepo
            }
         }
 
-        public List<Author> GetAuthorsById(int id)
+        public Author GetAuthorsById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -139,9 +130,7 @@ namespace AuthorsRepo
                             {
                                 Id = (int)reader["Id"],
                                 Name = reader["Name"].ToString(),
-                                Surname = reader["Country"].ToString(),
-                                PublishingCompanyId = reader["publishingcompany"].ToString(),
-                                PublishingYear = reader["publishingyear"].ToString()
+                                Surname = reader["Country"].ToString()
                             };
                         }
                     }

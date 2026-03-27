@@ -5,12 +5,11 @@ namespace publishRepo
 {
     public class publishRepo
     {
-        string querygetall = "";
-        string querygetid = "";
-        string querygetAdd = "";
-        string querygetDelete = "";
-
-        string querygetUpdate = "";
+        string querygetall = "select * from publishingcompany";
+        string querygetid = "select * from publishingcompany where Id = @Id";
+        string querygetAdd = "insert into publishingcompany (Id, Name, Country) values (@Id, @Name, @Country)";
+        string querygetDelete = "delete from publishingcompany where Id = @Id";
+        string querygetUpdate = "update publishingcompany set Name = @Name, Country = @Country where Id = @Id";
 
         private readonly string _connectionString;
 
@@ -115,25 +114,26 @@ namespace publishRepo
            }
         }
 
-        public List<publishingcompany> GetPublishingCompanyById(int id)
+        public List<publishingcompany> GetPublishingCompanies()
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                using (var command = new SqlCommand(querygetid, connection))
+                using (var command = new SqlCommand(querygetall, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", id);
                     using (var reader = command.ExecuteReader())
                     {
-                        if (reader.Read())
+                        var companies = new List<publishingcompany>();
+                        while (reader.Read())
                         {
-                            return new publishingcompany
+                            companies.Add(new publishingcompany
                             {
                                 Id = (int)reader["Id"],
                                 Name = reader["Name"].ToString(),
                                 Country = reader["Country"].ToString()
-                            };
+                            });
                         }
+                        return companies;
                     }
                 }
                 return null;

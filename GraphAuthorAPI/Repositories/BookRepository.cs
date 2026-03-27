@@ -6,12 +6,12 @@ namespace BooksRepo
 {
     public class BookRepo
     {
-        string querygetall = "";
-        string querygetid = "";
-        string querygetAdd = "";
-        string querygetDelete = "";
+        string querygetall = "select * from books";
+        string querygetid = "select * from books where Id = @Id";
+        string querygetAdd = "insert into books (Id, Title, AuthorId, PublishingCompanyId, Publishingyear) values (@Id, @Title, @AuthorId, @PublishingCompanyId, @Publishingyear)";
+        string querygetDelete = "delete from books where Id = @Id";
 
-        string querygetUpdate = "";
+        string querygetUpdate = "update books set Title = @Title, AuthorId = @AuthorId, PublishingCompanyId = @PublishingCompanyId, Publishingyear = @Publishingyear where Id = @Id";
 
         private readonly string _connectionString;
 
@@ -32,11 +32,13 @@ namespace BooksRepo
                     {
                         if (reader.Read())
                         {
-                            return new Books
+                            return new Book
                             {
                                 Id = (int)reader["Id"],
-                                Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Title = reader["Title"].ToString(),
+                                AuthorId = (int)reader["AuthorId"],
+                                PublishingCompanyId = (int)reader["PublishingCompanyId"],
+                                Publishingyear = (int)reader["Publishingyear"]
                             };
                         }
                     }
@@ -53,8 +55,10 @@ namespace BooksRepo
                 using (var command = new SqlCommand(querygetAdd, connection))
                 {
                     command.Parameters.AddWithValue("@Id", book.Id);
-                    command.Parameters.AddWithValue("@Name", book.Name);
-                    command.Parameters.AddWithValue("@Country", book.Country);
+                    command.Parameters.AddWithValue("@Title", book.Title);
+                    command.Parameters.AddWithValue("@AuthorId", book.AuthorId);
+                    command.Parameters.AddWithValue("@PublishingCompanyId", book.PublishingCompanyId);
+                    command.Parameters.AddWithValue("@Publishingyear", book.Publishingyear);
                     using (var reader = command.ExecuteReader())
                     {
                         if (reader.Read())
@@ -62,8 +66,10 @@ namespace BooksRepo
                             return new Book
                             {
                                 Id = (int)reader["Id"],
-                                Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Title = reader["Title"].ToString(),
+                                AuthorId = (int)reader["AuthorId"],
+                                PublishingCompanyId = (int)reader["PublishingCompanyId"],
+                                Publishingyear = (int)reader["Publishingyear"]
                             };
                         }
                     }
@@ -81,8 +87,10 @@ namespace BooksRepo
                 using (var command = new SqlCommand(querygetUpdate, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
-                    command.Parameters.AddWithValue("@Name", book.Name);
-                    command.Parameters.AddWithValue("@Country", book.Country);
+                    command.Parameters.AddWithValue("@Title", book.Title);
+                    command.Parameters.AddWithValue("@AuthorId", book.AuthorId);
+                    command.Parameters.AddWithValue("@PublishingCompanyId", book.PublishingCompanyId);
+                    command.Parameters.AddWithValue("@Publishingyear", book.Publishingyear);
                     using (var reader = command.ExecuteReader())
                     {
                         if (reader.Read())
@@ -90,8 +98,10 @@ namespace BooksRepo
                             return new Book
                             {
                                 Id = (int)reader["Id"],
-                                Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Title = reader["Title"].ToString(),
+                                AuthorId = (int)reader["AuthorId"],
+                                PublishingCompanyId = (int)reader["PublishingCompanyId"],
+                                Publishingyear = (int)reader["Publishingyear"]
                             };
                         }
                     }
@@ -116,7 +126,7 @@ namespace BooksRepo
            }
         }
 
-        public List<Book> GetBooksById(int id)
+        public Book GetBooksById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -128,11 +138,13 @@ namespace BooksRepo
                     {
                         if (reader.Read())
                         {
-                            return new Author
+                            return new Book
                             {
                                 Id = (int)reader["Id"],
-                                Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Title = reader["Title"].ToString(),
+                                AuthorId = (int)reader["AuthorId"],
+                                PublishingCompanyId = (int)reader["PublishingCompanyId"],
+                                Publishingyear = (int)reader["Publishingyear"]
                             };
                         }
                     }
