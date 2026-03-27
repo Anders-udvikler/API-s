@@ -1,9 +1,8 @@
 using Microsoft.Data.SqlClient;
-using publishingcompanies;
 
-namespace publishRepo
+namespace AuthorsRepo
 {
-    public class publishRepo
+    public class AuthorRepo
     {
         string querygetall = "";
         string querygetid = "";
@@ -14,12 +13,12 @@ namespace publishRepo
 
         private readonly string _connectionString;
 
-        public publishRepo(string connectionString)
+        public AuthorRepo(string connectionString)
         {
             _connectionString = connectionString;
         }
 
-        public publishingcompany GetPublishingCompanyById(int id)
+        public AuthorRepo GetAuthorRepoById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -31,7 +30,7 @@ namespace publishRepo
                     {
                         if (reader.Read())
                         {
-                            return new publishingcompany
+                            return new Author
                             {
                                 Id = (int)reader["Id"],
                                 Name = reader["Name"].ToString(),
@@ -139,6 +138,5 @@ namespace publishRepo
                 return null;
             }
         }
-    
 }
 }
