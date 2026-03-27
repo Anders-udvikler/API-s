@@ -1,0 +1,6 @@
+@GRPAuthorAPI_HostAddress = http://localhost:5280
+
+GET {{GRPAuthorAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,6 @@
+@GraphAuthorAPI_HostAddress = http://localhost:5165
+
+GET {{GraphAuthorAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
