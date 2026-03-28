@@ -47,11 +47,11 @@ namespace BooksRepo
             }
         }
 
-        public Book AddBook(Book book)
+        public async Task<Book> AddBook(Book book)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetAdd, connection))
                 {
                     command.Parameters.AddWithValue("@Id", book.Id);
@@ -59,9 +59,9 @@ namespace BooksRepo
                     command.Parameters.AddWithValue("@AuthorId", book.AuthorId);
                     command.Parameters.AddWithValue("@PublishingCompanyId", book.PublishingCompanyId);
                     command.Parameters.AddWithValue("@Publishingyear", book.Publishingyear);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new Book
                             {
@@ -79,11 +79,11 @@ namespace BooksRepo
         }
     }
 
-        public Book UpdateBook(Book book, int id)
+        public async Task<Book> UpdateBook(Book book, int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetUpdate, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -91,9 +91,9 @@ namespace BooksRepo
                     command.Parameters.AddWithValue("@AuthorId", book.AuthorId);
                     command.Parameters.AddWithValue("@PublishingCompanyId", book.PublishingCompanyId);
                     command.Parameters.AddWithValue("@Publishingyear", book.Publishingyear);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new Book
                             {
@@ -110,18 +110,30 @@ namespace BooksRepo
         }
     }
 
-        public async Task DeleteAuthor(int id)
+        public async Task<Book> DeleteBook(int id)
         {
 
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
-                using (var command = new SqlCommand(querygetid, connection))
+                using (var command = new SqlCommand(querygetDelete, connection))
                 {
+                    await connection.OpenAsync();
                     command.Parameters.AddWithValue("@Id", id);
-                    command.Parameters.AddWithValue("@Id", id);
-                    command.Parameters.AddWithValue("@Id", id);
-                    await command.ExecuteNonQueryAsync();
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            return new Book
+                            {
+                                Id = (int)reader["Id"],
+                                Title = reader["Title"].ToString(),
+                                AuthorId = (int)reader["AuthorId"],
+                                PublishingCompanyId = (int)reader["PublishingCompanyId"],
+                                Publishingyear = (int)reader["Publishingyear"]
+                            };
+                        }
+                    }
+                    return null;
                 }
            }
         }
