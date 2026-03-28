@@ -43,19 +43,20 @@ namespace AuthorsRepo
             }
         }
 
-        public Author AddAuthor(Author author)
+        public async Task<Author> AddAuthor(Author author)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetAdd, connection))
                 {
                     command.Parameters.AddWithValue("@Id", author.Id);
                     command.Parameters.AddWithValue("@Name", author.Name);
                     command.Parameters.AddWithValue("@Surname", author.Surname);
-                    using (var reader = command.ExecuteReader())
+                    command.ExecuteNonQuery();
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new Author
                             {
@@ -71,19 +72,20 @@ namespace AuthorsRepo
         }
     }
 
-        public Author UpdateAuthor(Author author, int id)
+        public async Task<Author> UpdateAuthor(Author author, int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetUpdate, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     command.Parameters.AddWithValue("@Name", author.Name);
                     command.Parameters.AddWithValue("@Surname", author.Surname);
-                    using (var reader = command.ExecuteReader())
+                    command.ExecuteNonQuery();
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new Author
                             {
@@ -98,19 +100,27 @@ namespace AuthorsRepo
         }
     }
 
-        public async Task DeleteAuthor(int id)
+        public async Task<Author> DeleteAuthor(int id)
         {
 
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetid, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     command.Parameters.AddWithValue("@Id", id);
                     command.Parameters.AddWithValue("@Id", id);
                     await command.ExecuteNonQueryAsync();
+                    if (await command.ExecuteReaderAsync() != null)
+                    {
+                        return new Author()
+                        {
+                            Id = id
+                        };
+                    }
                 }
+                return null;
            }
         }
 
