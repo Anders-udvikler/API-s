@@ -20,17 +20,17 @@ namespace BooksRepo
             _connectionString = connectionString;
         }
 
-        public Book GetBookRepoById(int id)
+        public async Task<Book> GetBookRepoById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetid, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new Book
                             {
@@ -126,30 +126,30 @@ namespace BooksRepo
            }
         }
 
-        public Book GetBooksById(int id)
+        public async Task<List<Book>> GetBooks()
         {
+            var books = new List<Book>();
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
-                using (var command = new SqlCommand(querygetid, connection))
+                await connection.OpenAsync();
+                using (var command = new SqlCommand(querygetall, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", id);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        while (await reader.ReadAsync())
                         {
-                            return new Book
+                            books.Add(new Book
                             {
                                 Id = (int)reader["Id"],
                                 Title = reader["Title"].ToString(),
                                 AuthorId = (int)reader["AuthorId"],
                                 PublishingCompanyId = (int)reader["PublishingCompanyId"],
                                 Publishingyear = (int)reader["Publishingyear"]
-                            };
+                            });
                         }
                     }
                 }
-                return null;
+                return books;
             }
         }
 }

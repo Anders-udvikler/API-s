@@ -18,17 +18,17 @@ namespace AuthorsRepo
             _connectionString = connectionString;
         }
 
-        public Author GetAuthorRepoById(int id)
+        public async Task<Author> GetAuthorRepoById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetid, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new Author
                             {
@@ -114,28 +114,28 @@ namespace AuthorsRepo
            }
         }
 
-        public Author GetAuthorsById(int id)
+        public async Task<List<Author>> GetAuthors()
         {
+            var authors = new List<Author>();
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                using (var command = new SqlCommand(querygetid, connection))
+                using (var command = new SqlCommand(querygetall, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", id);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        while (await reader.ReadAsync())
                         {
-                            return new Author
+                            authors.Add(new Author
                             {
                                 Id = (int)reader["Id"],
                                 Name = reader["Name"].ToString(),
                                 Surname = reader["Country"].ToString()
-                            };
+                            });
                         }
                     }
                 }
-                return null;
+                return authors;
             }
         }
 }

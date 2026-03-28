@@ -18,23 +18,22 @@ namespace publishRepo
             _connectionString = connectionString;
         }
 
-        public publishingcompany GetPublishingCompanyById(int id)
+        public async Task<publishingcompany> GetPublishingCompanyById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetid, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new publishingcompany
                             {
                                 Id = (int)reader["Id"],
-                                Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Name = reader["Name"].ToString()
                             };
                         }
                     }
@@ -43,25 +42,23 @@ namespace publishRepo
             }
         }
 
-        public publishingcompany AddPublishingCompany(publishingcompany company)
+        public async Task<publishingcompany> AddPublishingCompany(publishingcompany company)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetAdd, connection))
                 {
                     command.Parameters.AddWithValue("@Id", company.Id);
                     command.Parameters.AddWithValue("@Name", company.Name);
-                    command.Parameters.AddWithValue("@Country", company.Country);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new publishingcompany
                             {
                                 Id = (int)reader["Id"],
-                                Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Name = reader["Name"].ToString()
                             };
                         }
                     }
@@ -71,25 +68,23 @@ namespace publishRepo
         }
     }
 
-        public publishingcompany UpdatePublishingCompany(publishingcompany company, int id)
+        public async Task<publishingcompany> UpdatePublishingCompany(publishingcompany company, int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetUpdate, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     command.Parameters.AddWithValue("@Name", company.Name);
-                    command.Parameters.AddWithValue("@Country", company.Country);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new publishingcompany
                             {
                                 Id = (int)reader["Id"],
-                                Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Name = reader["Name"].ToString()
                             };
                         }
                     }
@@ -98,12 +93,12 @@ namespace publishRepo
         }
     }
 
-        public async Task DeletePublishingCompany(int id)
+        public async Task<publishingcompany> DeletePublishingCompany(int id)
         {
 
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetid, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -111,26 +106,26 @@ namespace publishRepo
                     command.Parameters.AddWithValue("@Id", id);
                     await command.ExecuteNonQueryAsync();
                 }
+                return null;
            }
         }
 
-        public List<publishingcompany> GetPublishingCompanies()
+        public async Task<List<publishingcompany>> GetPublishingCompanies()
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new SqlCommand(querygetall, connection))
                 {
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
                         var companies = new List<publishingcompany>();
-                        while (reader.Read())
+                        while (await reader.ReadAsync())
                         {
                             companies.Add(new publishingcompany
                             {
                                 Id = (int)reader["Id"],
-                                Name = reader["Name"].ToString(),
-                                Country = reader["Country"].ToString()
+                                Name = reader["Name"].ToString()
                             });
                         }
                         return companies;
