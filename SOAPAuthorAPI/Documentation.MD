@@ -408,7 +408,6 @@ Rollback all:
 
 > **Warning:** This can remove all tables/data from db file.
 
-
 ```bash
 dotnet ef database update 0
 ```
