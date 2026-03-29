@@ -46,3 +46,4 @@ wwwroot/
 
 # MagicOnion / gRPC generated (if any)
 Generated/
+/GRPAuthorAPI/DataSources/library.db

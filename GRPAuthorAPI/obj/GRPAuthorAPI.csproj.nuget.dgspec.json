@@ -50,17 +50,31 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
-            "MagicOnion.Hosting": {
+            "Grpc.AspNetCore": {
               "target": "Package",
-              "version": "[3.0.13, )"
+              "version": "[2.32.0, )"
             },
-            "MagicOnion.Server": {
+            "Grpc.Net.Client": {
               "target": "Package",
-              "version": "[7.10.0, )"
+              "version": "[2.52.0, )"
+            },
+            "Grpc.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.40.0, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[10.0.3, )"
+            },
+            "Microsoft.Data.Sqlite": {
+              "target": "Package",
+              "version": "[10.0.5, )"
+            },
+            "protobuf-net": {
+              "target": "Package",
+              "version": "[3.2.56, )"
             }
           },
           "imports": [

@@ -38,7 +38,7 @@ public class SqLiteEntry
                 }
             }
             Console.WriteLine(result.Count);
-            Console.WriteLine(result[0]);
+            //Console.WriteLine(result[0]);
             return result;
         }
         catch (SqliteException ex)
