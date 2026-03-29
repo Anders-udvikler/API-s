@@ -12,6 +12,21 @@ namespace Library.SoapApi.Services
     {
         private readonly AppDbContext _db;
 
+        private static FaultException<ValidationFault> ValidationFault(string message) =>
+            new FaultException<ValidationFault>(
+                new ValidationFault { Message = message },
+                new FaultReason(message));
+
+        private static FaultException<NotFoundFault> NotFoundFault(string message) =>
+            new FaultException<NotFoundFault>(
+                new NotFoundFault { Message = message },
+                new FaultReason(message));
+
+        private static FaultException<ConflictFault> ConflictFault(string message) =>
+            new FaultException<ConflictFault>(
+                new ConflictFault { Message = message },
+                new FaultReason(message));
+
         public LibrarySoapService(AppDbContext db)
         {
             _db = db;
@@ -23,14 +38,12 @@ namespace Library.SoapApi.Services
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault { Message = "Title is required" });
+                throw ValidationFault("Title is required");
             }
 
             if (publishingYear < 1900)
             {
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault { Message = "Publishing year must be >= 1900" });
+                throw ValidationFault("Publishing year must be >= 1900");
             }
 
             var book = new tbook
@@ -53,8 +66,7 @@ namespace Library.SoapApi.Services
 
             if (book == null)
             {
-                throw new FaultException<NotFoundFault>(
-                    new NotFoundFault { Message = "Book not found" });
+                throw NotFoundFault("Book not found");
             }
 
             return Mapper.ToDto(book);
@@ -71,22 +83,19 @@ namespace Library.SoapApi.Services
         {
             if (book == null || string.IsNullOrWhiteSpace(book.Title))
             {
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault { Message = "Invalid book data" });
+                throw ValidationFault("Invalid book data");
             }
 
             if (book.PublishingYear < 1900)
             {
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault { Message = "Publishing year must be >= 1900" });
+                throw ValidationFault("Publishing year must be >= 1900");
             }
 
             var existing = _db.tbook.FirstOrDefault(b => b.nBookID == book.Id);
 
             if (existing == null)
             {
-                throw new FaultException<NotFoundFault>(
-                    new NotFoundFault { Message = "Book not found" });
+                throw NotFoundFault("Book not found");
             }
 
             existing.cTitle = book.Title;
@@ -105,8 +114,7 @@ namespace Library.SoapApi.Services
 
             if (book == null)
             {
-                throw new FaultException<NotFoundFault>(
-                    new NotFoundFault { Message = "Book not found" });
+                throw NotFoundFault("Book not found");
             }
 
             _db.tbook.Remove(book);
@@ -121,8 +129,7 @@ namespace Library.SoapApi.Services
         {
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(surname))
             {
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault { Message = "Name and surname are required" });
+                throw ValidationFault("Name and surname are required");
             }
 
             var author = new tauthor
@@ -143,8 +150,7 @@ namespace Library.SoapApi.Services
 
             if (author == null)
             {
-                throw new FaultException<NotFoundFault>(
-                    new NotFoundFault { Message = "Author not found" });
+                throw NotFoundFault("Author not found");
             }
 
             return Mapper.ToDto(author);
@@ -161,16 +167,14 @@ namespace Library.SoapApi.Services
         {
             if (author == null || string.IsNullOrWhiteSpace(author.Name) || string.IsNullOrWhiteSpace(author.Surname))
             {
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault { Message = "Invalid author data" });
+                throw ValidationFault("Invalid author data");
             }
 
             var existing = _db.tauthor.FirstOrDefault(a => a.nAuthorID == author.Id);
 
             if (existing == null)
             {
-                throw new FaultException<NotFoundFault>(
-                    new NotFoundFault { Message = "Author not found" });
+                throw NotFoundFault("Author not found");
             }
 
             existing.cName = author.Name;
@@ -187,16 +191,14 @@ namespace Library.SoapApi.Services
 
             if (author == null)
             {
-                throw new FaultException<NotFoundFault>(
-                    new NotFoundFault { Message = "Author not found" });
+                throw NotFoundFault("Author not found");
             }
 
             var isUsed = _db.tbook.Any(b => b.nAuthorID == id);
 
             if (isUsed)
             {
-                throw new FaultException<ConflictFault>(
-                    new ConflictFault { Message = "Cannot delete author: referenced by book" });
+                throw ConflictFault("Cannot delete author: referenced by book");
             }
 
             _db.tauthor.Remove(author);
@@ -211,8 +213,7 @@ namespace Library.SoapApi.Services
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault { Message = "Name is required" });
+                throw ValidationFault("Name is required");
             }
 
             var company = new tpublishingcompany
@@ -232,8 +233,7 @@ namespace Library.SoapApi.Services
 
             if (company == null)
             {
-                throw new FaultException<NotFoundFault>(
-                    new NotFoundFault { Message = "Publishing company not found" });
+                throw NotFoundFault("Publishing company not found");
             }
 
             return Mapper.ToDto(company);
@@ -250,16 +250,14 @@ namespace Library.SoapApi.Services
         {
             if (company == null || string.IsNullOrWhiteSpace(company.Name))
             {
-                throw new FaultException<ValidationFault>(
-                    new ValidationFault { Message = "Invalid company data" });
+                throw ValidationFault("Invalid company data");
             }
 
             var existing = _db.tpublishingcompany.FirstOrDefault(c => c.nPublishingCompanyID == company.Id);
 
             if (existing == null)
             {
-                throw new FaultException<NotFoundFault>(
-                    new NotFoundFault { Message = "Publishing company not found" });
+                throw NotFoundFault("Publishing company not found");
             }
 
             existing.cName = company.Name;
@@ -275,16 +273,14 @@ namespace Library.SoapApi.Services
 
             if (company == null)
             {
-                throw new FaultException<NotFoundFault>(
-                    new NotFoundFault { Message = "Publishing company not found" });
+                throw NotFoundFault("Publishing company not found");
             }
 
             var isUsed = _db.tbook.Any(b => b.nPublishingCompanyID == id);
 
             if (isUsed)
             {
-                throw new FaultException<ConflictFault>(
-                    new ConflictFault { Message = "Cannot delete company: referenced by book" });
+                throw ConflictFault("Cannot delete company: referenced by book");
             }
 
             _db.tpublishingcompany.Remove(company);
