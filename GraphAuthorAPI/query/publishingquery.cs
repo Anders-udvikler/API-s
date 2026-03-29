@@ -1,3 +1,7 @@
+using Auhtors;
+using AuthorsRepo;
+using Books;
+using BooksRepo;
 using publishingcompanies;
 using publishRepo;
 
@@ -18,27 +22,26 @@ namespace authorquery
     {
         return await repo.GetPublishingCompanyById(id);
     }
-    
 
-    public async Task<publishingcompany> UpdatePublishingCompany(
-        int id,publishingcompany company,
-        [Service] publishRepo.publishRepo repo)
+    public async Task<List<Author>> GetAllAuthors(
+        [Service] AuthorRepo  repo)
     {
-        return await repo.UpdatePublishingCompany(company, id);
-    }
-    
-
-    public async Task<publishingcompany> AddPublishingCompany(
-        int id,publishingcompany company,
-        [Service] publishRepo.publishRepo repo)
-    {
-        return await repo.AddPublishingCompany(company);
+        var allAuthors = await repo.GetAuthors();
+        return allAuthors;
     }
 
-        public async Task<publishingcompany> DeletePublishingCompany(int id,
-        [Service] publishRepo.publishRepo repo)
+            public async Task<List<Book>> GetAllBooks(
+        [Service] BookRepo  repo)
     {
-        return await repo.DeletePublishingCompany(id);
+        var allBooks = await repo.GetBooks();
+        return allBooks;
+    }
+
+    public async Task<Book> GetBookById(
+        int id,
+        [Service] BookRepo  repo)
+    {
+        return await repo.GetBookRepoById(id);
     }
 
 

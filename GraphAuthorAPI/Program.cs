@@ -1,7 +1,4 @@
 using authorquery;
-using bookquery;
-using authormutation;
-using bookmutation;
 using publishingmutation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,11 +9,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddGraphQLServer()
     .AddQueryType<publishingquery>()
-    .AddQueryType<authorquery.authorquery>()
-    .AddQueryType<bookquery.bookquery>()
-    .AddMutationType<publishingmutation.publishingmutation>()
-    .AddMutationType<authormutation.authormutation>()
-    .AddMutationType<bookmutation.bookmutation>();
+    .AddMutationType<publishingmutation.publishingmutation>();
 
 var app = builder.Build();
 
@@ -27,6 +20,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapGraphQL("/graphql");
 
 app.Run();
 
