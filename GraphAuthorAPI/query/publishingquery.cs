@@ -16,7 +16,7 @@ namespace authorquery
         return allPublishingCompanies;
     }
 
-    public async Task<publishingcompany> GetPublishingCompanyById(
+    public async Task<publishingcompany?> GetPublishingCompanyById(
         int id,
         [Service] publishRepo.publishRepo repo)
     {
@@ -30,7 +30,7 @@ namespace authorquery
         return allAuthors;
     }
 
-        public async Task<Author> GetAuthor(
+        public async Task<Author?> GetAuthor(
         [Service] AuthorRepo  repo,int id)
     {
         var allAuthors = await repo.GetAuthorRepoById(id);
@@ -44,7 +44,7 @@ namespace authorquery
         return allBooks;
     }
 
-    public async Task<Book> GetBookById(
+    public async Task<Book?> GetBookById(
         int id,
         [Service] BookRepo  repo)
     {

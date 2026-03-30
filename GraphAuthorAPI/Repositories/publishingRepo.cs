@@ -18,7 +18,7 @@ namespace publishRepo
             _connectionString = connectionString;
         }
 
-        public async Task<publishingcompany> GetPublishingCompanyById(int id)
+        public async Task<publishingcompany?> GetPublishingCompanyById(int id)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -42,7 +42,7 @@ namespace publishRepo
             }
         }
 
-        public async Task<publishingcompany> AddPublishingCompany(publishingcompany company)
+        public async Task<publishingcompany?> AddPublishingCompany(publishingcompany company)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -68,7 +68,7 @@ namespace publishRepo
         }
     }
 
-        public async Task<publishingcompany> UpdatePublishingCompany(publishingcompany company, int id)
+        public async Task<publishingcompany?> UpdatePublishingCompany(publishingcompany company, int id)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -93,7 +93,7 @@ namespace publishRepo
         }
     }
 
-        public async Task<publishingcompany> DeletePublishingCompany(int id)
+        public async Task<publishingcompany?> DeletePublishingCompany(int id)
         {
 
             using (var connection = new MySqlConnection(_connectionString))
@@ -129,7 +129,6 @@ namespace publishRepo
                         return companies;
                     }
                 }
-                return null;
             }
         }
 }

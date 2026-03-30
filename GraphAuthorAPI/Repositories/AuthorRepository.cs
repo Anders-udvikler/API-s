@@ -18,7 +18,7 @@ namespace AuthorsRepo
             _connectionString = connectionString;
         }
 
-        public async Task<Author> GetAuthorRepoById(int id)
+        public async Task<Author?> GetAuthorRepoById(int id)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -43,7 +43,7 @@ namespace AuthorsRepo
             }
         }
 
-        public async Task<Author> AddAuthor(Author author)
+        public async Task<Author?> AddAuthor(Author author)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -72,7 +72,7 @@ namespace AuthorsRepo
         }
     }
 
-        public async Task<Author> UpdateAuthor(Author author, int id)
+        public async Task<Author?> UpdateAuthor(Author author, int id)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -100,7 +100,7 @@ namespace AuthorsRepo
         }
     }
 
-        public async Task<Author> DeleteAuthor(int id)
+        public async Task<Author?> DeleteAuthor(int id)
         {
 
             using (var connection = new MySqlConnection(_connectionString))

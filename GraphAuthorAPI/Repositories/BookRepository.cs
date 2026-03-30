@@ -20,7 +20,7 @@ namespace BooksRepo
             _connectionString = connectionString;
         }
 
-        public async Task<Book> GetBookRepoById(int id)
+        public async Task<Book?> GetBookRepoById(int id)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
