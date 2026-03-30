@@ -30,6 +30,13 @@ namespace authorquery
         return allAuthors;
     }
 
+        public async Task<Author> GetAuthor(
+        [Service] AuthorRepo  repo,int id)
+    {
+        var allAuthors = await repo.GetAuthorRepoById(id);
+        return allAuthors;
+    }
+
             public async Task<List<Book>> GetAllBooks(
         [Service] BookRepo  repo)
     {
