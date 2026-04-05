@@ -56,5 +56,4 @@ enum Status{
     UNAVAILABLE = 14;
     DATA_LOSS = 15;
     UNAUTHENTICATED = 16;
-
 }

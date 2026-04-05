@@ -6,9 +6,9 @@ namespace GRPAuthorAPI.Logic;
 
 public class BookNotifier
 {
-    private readonly ConcurrentDictionary<Guid, IServerStreamWriter<GrpcBooks.Book>> _subscribers = new();
+    private readonly ConcurrentDictionary<Guid, IServerStreamWriter<Book>> _subscribers = new();
 
-    public Guid Subscribe(IServerStreamWriter<GrpcBooks.Book> stream)
+    public Guid Subscribe(IServerStreamWriter<Book> stream)
     {
         var id = Guid.NewGuid();
         _subscribers[id] = stream;
@@ -17,20 +17,32 @@ public class BookNotifier
 
     public void Unsubscribe(Guid id)
     {
-        _subscribers.TryRemove(id, out _);
+        try
+        {
+            var success = _subscribers.TryRemove(id, out _);
+            if (!success)
+            {
+                throw new Exception($"{id} could not be removed");
+            }
+        }
+        catch (ArgumentNullException ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
-    public async Task BroadcastAsync(GrpcBooks.Book book)
+    public async Task BroadcastAsync(Book book)
     {
+        ArgumentNullException.ThrowIfNull(book);
         foreach (var subscriber in _subscribers.Values)
         {
             try
             {
                 await subscriber.WriteAsync(book);
             }
-            catch
+            catch  (Exception ex)
             {
-                // client probably disconnected, ignore or clean up later
+                throw new Exception(ex.Message);
             }
         }
     }

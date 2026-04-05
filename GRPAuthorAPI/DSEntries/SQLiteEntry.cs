@@ -4,10 +4,9 @@ namespace GRPAuthorAPI.DSEntries;
 
 public class SqLiteEntry
 {
-    public static List<BookDto>? AccessDs(String sqlQuery, string? bookTitle)
+    public static List<BookDto> AccessDs(String sqlQuery, string? bookTitle, int? authorId)
     {
         using var connection = new SqliteConnection("Data Source=DataSources/library.db");
-        
         try
         {
             connection.Open();
@@ -15,10 +14,12 @@ public class SqLiteEntry
             var command = connection.CreateCommand();
             command.CommandText = sqlQuery;
 
-            if (sqlQuery.ToLower().Contains("insert") && bookTitle != null)
+            if (sqlQuery.ToLower().Contains("insert") && bookTitle != null && authorId != null)
             {
                 using var updater = command.ExecuteNonQueryAsync();
-                command.CommandText =  String.Format("select * from Tbook where cTitle = '{0}';", bookTitle);
+                command.CommandText =  String.Format("select * from Tbook where cTitle = '{0}' " +
+                                                     "and NAuthorId = {1};", 
+                    bookTitle, authorId);
             }
 
             using var reader = command.ExecuteReader();
@@ -26,25 +27,23 @@ public class SqLiteEntry
             List<BookDto> result = new List<BookDto>();
             while (reader.Read())
             {
-                if (!reader.IsDBNull(0))
+                if (reader.IsDBNull(0))
                 {
-                    BookDto bookDto = new BookDto();
-                    bookDto.nBookId = reader.GetInt32(0);
-                    bookDto.cTitle = reader.GetString(1);
-                    bookDto.nAuthorID = reader.GetInt32(2);
-                    bookDto.nPublicationYear = reader.GetInt32(3);
-                    bookDto.nPublishingCompanyID = reader.GetInt32(4);
-                    result.Add(bookDto);
+                    throw new NullReferenceException("Book not found");
                 }
+                BookDto bookDto = new BookDto();
+                bookDto.NBookId = reader.GetInt32(0);
+                bookDto.CTitle = reader.GetString(1);
+                bookDto.NAuthorId = reader.GetInt32(2);
+                bookDto.NPublicationYear = reader.GetInt32(3);
+                bookDto.NPublishingCompanyId = reader.GetInt32(4);
+                result.Add(bookDto);
             }
-            Console.WriteLine(result.Count);
-            //Console.WriteLine(result[0]);
             return result;
         }
         catch (SqliteException ex)
         {
-            Console.WriteLine(ex.Message);
-            return null;
+            throw new Exception(ex.Message);
         }
         finally
         {
@@ -54,10 +53,10 @@ public class SqLiteEntry
     
     public class BookDto
     {
-        public int nBookId { get; set; }
-        public string cTitle { get; set; }
-        public int nAuthorID { get; set; }
-        public int nPublishingCompanyID { get; set; }
-        public int nPublicationYear { get; set; }
+        public int NBookId { get; set; }
+        public string CTitle { get; set; }
+        public int NAuthorId { get; set; }
+        public int NPublishingCompanyId { get; set; }
+        public int NPublicationYear { get; set; }
     }
 }
