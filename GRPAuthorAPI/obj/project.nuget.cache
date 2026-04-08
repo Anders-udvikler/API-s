@@ -1,11 +1,28 @@
 {
   "version": 2,
-  "dgSpecHash": "YluXX7DD/3M=",
+  "dgSpecHash": "nqFQNgyvkjg=",
   "success": true,
   "projectFilePath": "C:\\Users\\ander\\OneDrive\\Dokumenter\\API's\\GRPAuthorAPI\\GRPAuthorAPI.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\ander\\.nuget\\packages\\google.protobuf\\3.13.0\\google.protobuf.3.13.0.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\grpc.aspnetcore\\2.32.0\\grpc.aspnetcore.2.32.0.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\grpc.aspnetcore.server\\2.32.0\\grpc.aspnetcore.server.2.32.0.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\grpc.aspnetcore.server.clientfactory\\2.32.0\\grpc.aspnetcore.server.clientfactory.2.32.0.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\grpc.core.api\\2.52.0\\grpc.core.api.2.52.0.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\grpc.net.client\\2.52.0\\grpc.net.client.2.52.0.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\grpc.net.clientfactory\\2.32.0\\grpc.net.clientfactory.2.32.0.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\grpc.net.common\\2.52.0\\grpc.net.common.2.52.0.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\grpc.tools\\2.40.0\\grpc.tools.2.40.0.nupkg.sha512",
     "C:\\Users\\ander\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.3\\microsoft.aspnetcore.openapi.10.0.3.nupkg.sha512",
-    "C:\\Users\\ander\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+    "C:\\Users\\ander\\.nuget\\packages\\microsoft.data.sqlite\\10.0.5\\microsoft.data.sqlite.10.0.5.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\microsoft.data.sqlite.core\\10.0.5\\microsoft.data.sqlite.core.10.0.5.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\protobuf-net\\3.2.56\\protobuf-net.3.2.56.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\protobuf-net.core\\3.2.56\\protobuf-net.core.3.2.56.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.11\\sqlitepclraw.bundle_e_sqlite3.2.1.11.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\sqlitepclraw.core\\2.1.11\\sqlitepclraw.core.2.1.11.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.11\\sqlitepclraw.lib.e_sqlite3.2.1.11.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.11\\sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512"
   ],
   "logs": []
 }
