@@ -1,4 +1,4 @@
-using authorquery;
+using query;
 using AuthorsRepo;
 using BooksRepo;
 using publishRepo;
@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddGraphQLServer()
-    .AddQueryType<publishingquery>()
+    .AddQueryType<query.query>()
     .AddMutationType<publishingmutation.publishingmutation>();
 
 builder.Services.AddScoped<AuthorRepo>(sp =>
@@ -19,12 +19,14 @@ builder.Services.AddScoped<AuthorRepo>(sp =>
     var connectionString = config.GetConnectionString("DefaultConnection");
     return new AuthorRepo(connectionString);
 });
+
 builder.Services.AddScoped<BookRepo>(sp =>
 {
     var config = sp.GetRequiredService<IConfiguration>();
     var connectionString = config.GetConnectionString("DefaultConnection");
     return new BookRepo(connectionString);
 });
+
 builder.Services.AddScoped<publishRepo.publishRepo>(sp =>
 {
     var config = sp.GetRequiredService<IConfiguration>();

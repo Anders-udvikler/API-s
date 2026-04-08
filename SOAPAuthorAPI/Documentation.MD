@@ -442,52 +442,5 @@ Mapping/        Entity <-> DTO mapping
 Faults/         SOAP fault contracts
 Models/         DTOs
 Migrations/     EF migration files
-postman/        Postman collection
+postman/        Postman collections
 ```
-
----
-
-## Troubleshooting
-
-### 1) EF command throws IndexOutOfRangeException
-
-Cause: malformed command such as `dotnet ef migrations list --project` with no value.
-
-Use:
-
-```bash
-dotnet ef migrations list --project Library.SoapApi.csproj --startup-project Library.SoapApi.csproj
-```
-
-### 2) `dotnet ef ...` says Build failed
-
-Cause: project compile errors block EF tooling.
-
-Fix order:
-
-```bash
-dotnet build Library.SoapApi.csproj
-dotnet ef migrations list --project Library.SoapApi.csproj --startup-project Library.SoapApi.csproj
-```
-
-### 3) HTTPS/Postman connection issues
-
-- Confirm API is running.
-- Use launch profile URL from `Properties/launchSettings.json`.
-- Trust dev certificate with `dotnet dev-certs https --trust`.
-
-### 4) Migration version warning (tools/runtime mismatch)
-
-Align EF tool and packages to the same version.
-
----
-
-<!--
-## Known Limitations / Next Improvements
-
-- No authentication/authorization layer.
-- No pagination/filtering/search endpoints.
-- Limited automated testing coverage.
-- No CI pipeline included.
-
---- -->

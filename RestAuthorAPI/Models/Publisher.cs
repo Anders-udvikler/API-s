@@ -3,19 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Library.RestApi.Models
 {
-    /// Maps to table: tauthor
-  
-    [Table("tauthor")]
-    public class Author
+    /// Maps to table: tpublishingcompany
+   
+    [Table("tpublishingcompany")]
+    public class Publisher
     {
         [Key]
-        [Column("nAuthorID")]
+        [Column("nPublishingCompanyID")]
         public int Id { get; set; }
 
         [Column("cName")]
         public string Name { get; set; }
-
-        [Column("cSurname")]
-        public string Surname { get; set; }
     }
 }

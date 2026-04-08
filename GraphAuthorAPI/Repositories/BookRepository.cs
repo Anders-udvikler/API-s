@@ -1,31 +1,39 @@
 using Auhtors;
 using Books;
-using MySqlConnector;
+using Microsoft.Data.Sqlite;
+using AuthorsRepo;
+using publishRepo;
+using Microsoft.Data.SqlClient;
 
 namespace BooksRepo
 {
     public class BookRepo
     {
-        string querygetall = "select idbook, Name, AuthorId, PublishingCompanyId, Publishingyear from Book";
-        string querygetid = "select idbook, Name, AuthorId, PublishingCompanyId, Publishingyear from Book where idbook = @Id";
-        string querygetAdd = "insert into Book (Id, Name, AuthorId, PublishingCompanyId, Publishingyear) values (@Id, @Name, @AuthorId, @PublishingCompanyId, @Publishingyear)";
-        string querygetDelete = "delete from Book where Id = @Id";
+        string querygetall = "select nBookID, cTitle,nAuthorID,nPublishingCompanyId, nPublishingYear from tbook";
+        string querygetid = "select nBookID, cTitle, nAuthorID, nPublishingCompanyId, nPublishingYear from tbook where nBookID = @Id";
+        string querygetAdd = "insert into tbook (nBookID, cTitle, nAuthorID, nPublishingCompanyId, nPublishingYear) values (@Id, @cTitle, @nAuthorID, @nPublishingCompanyId, @nPublishingYear)";
+        string querygetDelete = "delete from tbook where nBookID = @Id";
 
-        string querygetUpdate = "update Book set Name = @Name, AuthorId = @AuthorId, PublishingCompanyId = @PublishingCompanyId, Publishingyear = @Publishingyear where Id = @Id";
+        string querygetUpdate = "update tbook set cTitle = @cTitle, nAuthorID = @nAuthorID, nPublishingCompanyId = @nPublishingCompanyId, nPublishingYear = @nPublishingYear where nBookID = @Id";
 
         private readonly string _connectionString;
+
+        private readonly publishRepo.publishRepo _publishRepo;
+        private readonly AuthorRepo _authorRepo;
 
         public BookRepo(string connectionString)
         {
             _connectionString = connectionString;
+            _publishRepo = new publishRepo.publishRepo(connectionString);
+            _authorRepo = new AuthorRepo(connectionString);
         }
 
         public async Task<Book?> GetBookRepoById(int id)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetid, connection))
+                using (var command = new SqliteCommand(querygetid, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     using (var reader = await command.ExecuteReaderAsync())
@@ -34,11 +42,11 @@ namespace BooksRepo
                         {
                             return new Book
                             {
-                                Id = (int)reader["idbook"],
-                                Title = reader["Name"].ToString(),
-                                AuthorId = (int)reader["AuthorId"],
-                                PublishingCompanyId = (int)reader["PublishingCompanyId"],
-                                Publishingyear = (int)reader["Publishingyear"]
+                                Id = Convert.ToInt32(reader["nBookID"]),
+                                Title = Convert.ToString(reader["cTitle"]),
+                                AuthorId = Convert.ToInt32(reader["nAuthorID"]),
+                                PublishingCompanyId = Convert.ToInt32(reader["nPublishingCompanyId"]),
+                                Publishingyear = Convert.ToInt32(reader["nPublishingYear"])
                             };
                         }
                     }
@@ -49,102 +57,130 @@ namespace BooksRepo
 
         public async Task<Book> AddBook(Book book)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            try
             {
-                await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetAdd, connection))
+                using (var connection = new SqliteConnection(_connectionString))
                 {
+                await connection.OpenAsync();
+                using (var command = new SqliteCommand(querygetAdd, connection))
+                {
+                    var company = await _publishRepo.GetPublishingCompanyById(book.PublishingCompanyId);
+                    var author = await _authorRepo.GetAuthorRepoById(book.AuthorId);
                     command.Parameters.AddWithValue("@Id", book.Id);
-                    command.Parameters.AddWithValue("@Title", book.Title);
-                    command.Parameters.AddWithValue("@AuthorId", book.AuthorId);
-                    command.Parameters.AddWithValue("@PublishingCompanyId", book.PublishingCompanyId);
-                    command.Parameters.AddWithValue("@Publishingyear", book.Publishingyear);
+                    command.Parameters.AddWithValue("@cTitle", book.Title);
+                    command.Parameters.AddWithValue("@nAuthorID", author.Id);
+                    command.Parameters.AddWithValue("@nPublishingCompanyId", company.Id);
+                    command.Parameters.AddWithValue("@nPublishingYear", book.Publishingyear);
                     using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (await reader.ReadAsync())
-                        {
                             return new Book
                             {
-                                Id = (int)reader["idbook"],
-                                Title = reader["Name"].ToString(),
-                                AuthorId = (int)reader["AuthorId"],
-                                PublishingCompanyId = (int)reader["PublishingCompanyId"],
-                                Publishingyear = (int)reader["Publishingyear"]
+                                Id = book.Id,
+                                Title = book.Title,
+                                AuthorId = author.Id,
+                                PublishingCompanyId = company.Id,
+                                Publishingyear = book.Publishingyear
                             };
-                        }
                     }
-                }
-                return null;
-            
-        }
+                } 
+            }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Database error: {ex.Message}");
+                throw;
+            }
+                        catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding book: {ex.Message}");
+                throw;
+            }
     }
 
         public async Task<Book> UpdateBook(Book book, int id)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            try
+            {
+                 using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetUpdate, connection))
+                using (var command = new SqliteCommand(querygetUpdate, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", id);
-                    command.Parameters.AddWithValue("@Title", book.Title);
-                    command.Parameters.AddWithValue("@AuthorId", book.AuthorId);
-                    command.Parameters.AddWithValue("@PublishingCompanyId", book.PublishingCompanyId);
-                    command.Parameters.AddWithValue("@Publishingyear", book.Publishingyear);
+                    var company = await _publishRepo.GetPublishingCompanyById(book.PublishingCompanyId);
+                    var author = await _authorRepo.GetAuthorRepoById(book.AuthorId);
+                    command.Parameters.AddWithValue("@Id", book.Id);
+                    command.Parameters.AddWithValue("@cTitle", book.Title);
+                    command.Parameters.AddWithValue("@nAuthorID", author.Id);
+                    command.Parameters.AddWithValue("@nPublishingCompanyId", company.Id);
+                    command.Parameters.AddWithValue("@nPublishingYear", book.Publishingyear);
                     using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (await reader.ReadAsync())
-                        {
                             return new Book
                             {
-                                Id = (int)reader["idbook"],
-                                Title = reader["Name"].ToString(),
-                                AuthorId = (int)reader["AuthorId"],
-                                PublishingCompanyId = (int)reader["PublishingCompanyId"],
-                                Publishingyear = (int)reader["Publishingyear"]
+                                Id =book.Id,
+                                Title = book.Title,
+                                AuthorId =author.Id,
+                                PublishingCompanyId = company.Id,
+                                Publishingyear = book.Publishingyear
                             };
-                        }
                     }
                 }
-                return null;
+            }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Database error: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating book: {ex.Message}");
+                throw;
+            }
         }
-    }
 
         public async Task<Book> DeleteBook(int id)
         {
-
-            using (var connection = new MySqlConnection(_connectionString))
+            try
             {
-                using (var command = new MySqlCommand(querygetDelete, connection))
-                {
+                 using (var connection = new SqliteConnection(_connectionString))
+                 {
+                    using (var command = new SqliteCommand(querygetDelete, connection))
+                    {
                     await connection.OpenAsync();
                     command.Parameters.AddWithValue("@Id", id);
                     using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (await reader.ReadAsync())
-                        {
                             return new Book
                             {
-                                Id = (int)reader["idbook"],
-                                Title = reader["Name"].ToString(),
-                                AuthorId = (int)reader["AuthorId"],
-                                PublishingCompanyId = (int)reader["PublishingCompanyId"],
-                                Publishingyear = (int)reader["Publishingyear"]
+                                Id = id
                             };
-                        }
                     }
-                    return null;
                 }
            }
+                
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Database error: {ex.Message}");
+                throw;
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine($"Error deleting book with id {id}: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<List<Book>> GetBooks()
         {
-            var books = new List<Book>();
-            using (var connection = new MySqlConnection(_connectionString))
+            try
+            {
+                            var books = new List<Book>();
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetall, connection))
+                using (var command = new SqliteCommand(querygetall, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
                     {
@@ -152,16 +188,28 @@ namespace BooksRepo
                         {
                             books.Add(new Book
                             {
-                                Id = (int)reader["idbook"],
-                                Title = reader["Name"].ToString(),
-                                AuthorId = (int)reader["AuthorId"],
-                                PublishingCompanyId = (int)reader["PublishingCompanyId"],
-                                Publishingyear = (int)reader["Publishingyear"]
+                                Id = Convert.ToInt32(reader["nBookID"]),
+                                Title = Convert.ToString(reader["cTitle"]),
+                                AuthorId = Convert.ToInt32(reader["nAuthorID"]),
+                                PublishingCompanyId = Convert.ToInt32(reader["nPublishingCompanyId"]),
+                                Publishingyear = Convert.ToInt32(reader["nPublishingYear"])
                             });
                         }
                     }
                 }
                 return books;
+            }
+                
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Database error: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving books: {ex.Message}");
+                throw;
             }
         }
 }

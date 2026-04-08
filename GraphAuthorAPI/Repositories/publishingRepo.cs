@@ -1,15 +1,16 @@
-using MySqlConnector;
+using Microsoft.Data.SqlClient;
+using Microsoft.Data.Sqlite;    
 using publishingcompanies;
 
 namespace publishRepo
 {
     public class publishRepo
     {
-        string querygetall = "select idpublishing,name from publishingcompanies";
-        string querygetid = "select idpublishing,name from publishingcompanies where idpublishing = @Id";
-        string querygetAdd = "insert into publishingcompanies (idpublishing, name) values (@Id, @Name)";
-        string querygetDelete = "delete from publishingcompanies where idpublishing = @Id";
-        string querygetUpdate = "update publishingcompanies set Name = @Name where idpublishing = @Id";
+        string querygetall = "select nPublishingCompanyID, cName from tpublishingcompany";
+        string querygetid = "select nPublishingCompanyID, cName from tpublishingcompany where nPublishingCompanyID = @Id";
+        string querygetAdd = "insert into tpublishingcompany (nPublishingCompanyID, cName) values (@Id, @Name)";
+        string querygetDelete = "delete from tpublishingcompany where nPublishingCompanyID = @Id";
+        string querygetUpdate = "update tpublishingcompany set cName = @Name where nPublishingCompanyID = @Id";
 
         private readonly string _connectionString;
 
@@ -20,100 +21,155 @@ namespace publishRepo
 
         public async Task<publishingcompany?> GetPublishingCompanyById(int id)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            try
             {
-                await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetid, connection))
+                using (var connection = new SqliteConnection(_connectionString))
                 {
-                    command.Parameters.AddWithValue("@Id", id);
-                    using (var reader = await command.ExecuteReaderAsync())
+                    await connection.OpenAsync();
+                    using (var command = new SqliteCommand(querygetid, connection))
                     {
-                        if (await reader.ReadAsync())
+                        command.Parameters.AddWithValue("@Id", id);
+                        using (var reader = await command.ExecuteReaderAsync())
                         {
-                            return new publishingcompany
+                            if (await reader.ReadAsync())
                             {
-                                Id = (int)reader["idpublishing"],
-                                Name = reader["name"].ToString()
-                            };
+                                return new publishingcompany
+                                {
+                                    Id = Convert.ToInt32(reader["nPublishingCompanyID"]),
+                                    Name = Convert.ToString(reader["cName"])
+                                };
+                            }
                         }
                     }
                 }
-                return null;
             }
+            catch(SqlException)
+            {
+                // Handle SQL exceptions (e.g., connection issues, query errors)
+                Console.WriteLine("A database error occurred while retrieving the publishing company.");
+                throw; // Re-throw the exception after logging it
+            }
+             catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            return null;
         }
 
         public async Task<publishingcompany?> AddPublishingCompany(publishingcompany company)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            try
+            {
+                using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetAdd, connection))
+                using (var command = new SqliteCommand(querygetAdd, connection))
                 {
                     command.Parameters.AddWithValue("@Id", company.Id);
                     command.Parameters.AddWithValue("@Name", company.Name);
                     using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (await reader.ReadAsync())
-                        {
                             return new publishingcompany
                             {
-                                Id = (int)reader["idpublishing"],
-                                Name = reader["name"].ToString()
+                                Id = company.Id,
+                                Name = company.Name
                             };
-                        }
                     }
-                }
-                return null;
+                    return null;
+                }}
+            }
+            catch (SqlException)
+            {
+                // Handle SQL exceptions (e.g., connection issues, query errors)
+                Console.WriteLine("A database error occurred while adding the publishing company.");
+                throw; // Re-throw the exception after logging it
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Re-throw the exception after logging it
+            }
             
-        }
     }
 
         public async Task<publishingcompany?> UpdatePublishingCompany(publishingcompany company, int id)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            try
+            {
+                            using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetUpdate, connection))
+                using (var command = new SqliteCommand(querygetUpdate, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     command.Parameters.AddWithValue("@Name", company.Name);
                     using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (await reader.ReadAsync())
-                        {
                             return new publishingcompany
                             {
-                                Id = (int)reader["idpublishing"],
-                                Name = reader["name"].ToString()
+                                Id = company.Id,
+                                Name = company.Name
                             };
-                        }
                     }
                 }
-                return null;
         }
-    }
+                
+            }
+            catch (SqlException)
+            {
+                // Handle SQL exceptions (e.g., connection issues, query errors)
+                Console.WriteLine("A database error occurred while updating the publishing company.");
+                throw; // Re-throw the exception after logging it
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Re-throw the exception after logging it
+            }
+        }
 
         public async Task<publishingcompany?> DeletePublishingCompany(int id)
         {
-
-            using (var connection = new MySqlConnection(_connectionString))
+            try
+            {
+                            using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetDelete, connection))
+                using (var command = new SqliteCommand(querygetDelete, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     await command.ExecuteNonQueryAsync();
                 }
-                return null;
-           }
+                return new publishingcompany
+                {
+                    Id = id 
+                };
+            }}
+            catch (SqlException)
+            {
+                // Handle SQL exceptions (e.g., connection issues, query errors)
+                Console.WriteLine("A database error occurred while deleting the publishing company.");
+                throw; // Re-throw the exception after logging it
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Re-throw the exception after logging it
+            }
         }
 
         public async Task<List<publishingcompany>> GetPublishingCompanies()
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            try
+            {
+                            using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetall, connection))
+                using (var command = new SqliteCommand(querygetall, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
                     {
@@ -122,13 +178,25 @@ namespace publishRepo
                         {
                             companies.Add(new publishingcompany
                             {
-                                Id = (int)reader["idpublishing"],
-                                Name = reader["name"].ToString()
+                                Id = Convert.ToInt32(reader["nPublishingCompanyID"]),
+                                Name = Convert.ToString(reader["cName"])
                             });
                         }
                         return companies;
                     }
                 }
+            }}
+            catch (SqlException)
+            {
+                // Handle SQL exceptions (e.g., connection issues, query errors)
+                Console.WriteLine("A database error occurred while retrieving the publishing companies.");
+                throw; // Re-throw the exception after logging it
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Re-throw the exception after logging it
             }
         }
 }

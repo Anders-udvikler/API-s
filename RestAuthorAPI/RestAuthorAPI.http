@@ -1,6 +1,0 @@
-@RestAuthorAPI_HostAddress = http://localhost:5089
-
-GET {{RestAuthorAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

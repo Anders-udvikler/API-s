@@ -1,0 +1,615 @@
+{
+  "info": {
+    "_postman_id": "67259930-d1af-477f-8c01-39f11b5dc8d4",
+    "name": "graphqlcollection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "30189153"
+  },
+  "item": [
+    {
+      "name": "deletebook",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Book deleted\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "    pm.expect(res.data.deleteBook).to.have.property(\"id\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation deleteBook($id:Int!) {\r\n  deleteBook(id: $id) {\r\n    id\r\n    title\r\n  }\r\n}",
+            "variables": "\r\n{\r\n    \"id\":7\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "updatebook",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Book updated\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "    pm.expect(res.data.updateBook.title).to.eql(\"Updated Book\");\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation UpdateBook($id: Int!, $book: BookInput!) {\r\n  updateBook(id: $id, book: $book) {\r\n    id\r\n    title\r\n    authorId\r\n    publishingCompanyId\r\n    publishingyear\r\n  }\r\n}",
+            "variables": "{\r\n  \"id\": 7,\r\n  \"book\": {\r\n    \"id\":7,\r\n    \"title\": \"Updated Book\",\r\n    \"authorId\": 3,\r\n    \"publishingCompanyId\": 3,\r\n    \"publishingyear\": 2026\r\n  }\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "addbook",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Book created\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "    pm.expect(res.data.addBook.title).to.eql(\"Test Book\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation AddBook($book: BookInput!) {\r\n  addBook(book: $book) {\r\n    id\r\n    title\r\n    authorId\r\n    publishingCompanyId\r\n    publishingyear\r\n  }\r\n}",
+            "variables": "{\r\n  \"book\": {\r\n    \"id\":7,\r\n    \"title\": \"Test Book\",\r\n    \"authorId\": 1,\r\n    \"publishingCompanyId\": 2,\r\n    \"publishingyear\": 2026\r\n  }\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "deleteauthor",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Author deleted\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "        pm.expect(res.errors, \"GraphQL errors: \" + JSON.stringify(res.errors)).to.be.undefined;\r",
+              "    pm.expect(res.data).to.not.be.null;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation deleteAuthor($id:Int!) {\r\n  deleteAuthor(id: $id) {\r\n    id\r\n    name\r\n    surname\r\n  }\r\n}",
+            "variables": "{\r\n    \"id\":7\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "addauthor",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Author created\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "    pm.expect(res.data.addAuthor.name).to.eql(\"John\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation addAuthor($au:AuthorInput!) {\r\n  addAuthor(au:$au) {\r\n    id\r\n    name\r\n    surname\r\n  }\r\n\r\n  }",
+            "variables": "{\r\n    \"au\":\r\n    {\r\n        \"id\":7,\r\n       \"name\":\"John\",\r\n       \"surname\":\"Doe\" \r\n    }\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "updateauthor",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Author updated\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "    pm.expect(res.data.updateAuthor.name).to.eql(\"John\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation updateAuthor($id:Int!,$au:AuthorInput!) {\r\n  updateAuthor(\r\n    id:$id,\r\n    author:$au\r\n  ) {\r\n    id\r\n    name\r\n    surname\r\n  }\r\n}",
+            "variables": "{\r\n    \"id\":7,\r\n    \"au\":\r\n    {\r\n        \"id\":7,\r\n       \"name\":\"John\",\r\n       \"surname\":\"Doe\" \r\n    }\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DeletePublishingCompany",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Publishing company deleted\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "    pm.expect(res.data.deletePublishingCompany).to.have.property(\"id\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation deletePublishingCompany($id:Int!) {\r\n  deletePublishingCompany(id: $id) {\r\n    id\r\n    name\r\n  }\r\n}",
+            "variables": "{\r\n    \"id\":7\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "addpublishingcompany",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Publishing company created\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "    pm.expect(res.data.addPublishingCompany).to.have.property(\"id\");\r",
+              "    pm.expect(res.data.addPublishingCompany.name).to.eql(\"New Publishing Company\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation AddPublishingCompany($input: publishingcompanyInput!) {\r\n  addPublishingCompany(publishingCompany: $input) {\r\n    id\r\n    name\r\n  }\r\n}",
+            "variables": "{\r\n  \"input\": {\r\n    \"id\":7,\r\n    \"name\": \"New Publishing Company\"\r\n  }\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UpdatePublishingCompany",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Publishing company updated\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "\r",
+              "    // Check the response contains the updatePublishingCompany field\r",
+              "    pm.expect(res.data).to.have.property(\"updatePublishingCompany\");\r",
+              "\r",
+              "    // Check the updated object has the fields we expect\r",
+              "    const company = res.data.updatePublishingCompany;\r",
+              "    pm.expect(company).to.have.property(\"id\");\r",
+              "    pm.expect(company).to.have.property(\"name\");\r",
+              "\r",
+              "    // Optional: check the name was updated correctly\r",
+              "    pm.expect(company.name).to.eql(\"Updated Publisher\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "mutation UpdatePublishingCompany($id: Int!, $input: publishingcompanyInput!) {\r\n  updatePublishingCompany(\r\n    id: $id,\r\n    publishingcompany: $input\r\n  ) {\r\n    id\r\n    name\r\n  }\r\n}",
+            "variables": "{\r\n   \"id\":7,\r\n  \"input\": {\r\n    \"id\":7,\r\n    \"name\": \"Updated Publisher\"\r\n  }\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getbook",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Book found\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.data.getBookById).to.not.be.null;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query bookById($id:Int!) {\r\n  bookById(id: $id) {\r\n    id\r\n    title\r\n    authorId\r\n  }\r\n}",
+            "variables": "{\r\n    \"id\":7\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getbooks",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Books list is not empty\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.data.allBooks.length).to.be.above(0);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\r\n  allBooks {\r\n    id\r\n    title\r\n    authorId\r\n  }\r\n}",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getauthor",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Author found\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.data.getAuthor).to.not.be.null;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query author($id:Int!) {\r\n  author(id: $id) {\r\n    id\r\n    name\r\n    surname\r\n  }\r\n}",
+            "variables": "{\r\n    \"id\":7\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getallauthors",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Books list is not empty\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.data.allAuthors.length).to.be.above(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\r\n  allAuthors {\r\n    id\r\n    name\r\n    surname\r\n  }\r\n}",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getpublishingcompany",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Company exists\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.data.getPublishingCompanyById).to.not.be.null;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query publishingCompanyById($id:Int!) {\r\n  publishingCompanyById(id: $id) {\r\n    id\r\n    name\r\n  }\r\n}",
+            "variables": "{\r\n    \"id\":7\r\n}"
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "allpublishingcompanies",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Books list is not empty\", function () {\r",
+              "    const jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.data.allPublishingCompanies.length).to.be.above(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "graphql",
+          "graphql": {
+            "query": "query {\r\n    allPublishingCompanies {\r\n        id,name\r\n    }\r\n}",
+            "variables": ""
+          }
+        },
+        "url": {
+          "raw": "{{Url}}",
+          "host": [
+            "{{Url}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "Url",
+      "value": ""
+    }
+  ]
+}
