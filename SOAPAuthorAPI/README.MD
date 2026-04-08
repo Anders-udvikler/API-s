@@ -33,7 +33,7 @@ SOAP API for managing books, authors, and publishing companies.
 1. Import collection file:
 
    ```text
-   postman/LibrarySoapApi.postman_collection.json
+   postman/LibrarySoapApi.postman_collection_updated.json
    ```
 
 1. Use endpoint:
