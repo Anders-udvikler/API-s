@@ -1,0 +1,49 @@
+# Build results
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# Test results
+TestResults/
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# Publish output
+publish/
+
+# Environment files
+.env
+
+# ASP.NET temp
+wwwroot/
+
+# MagicOnion / gRPC generated (if any)
+Generated/
+/GRPAuthorAPI/DataSources/library.db
