@@ -2,6 +2,41 @@
 
 SOAP API for managing books, authors, and publishing companies.
 
+## Architecture Overview
+
+```text
+SOAP Contract (DTOs only)
+        ↓
+Service (business logic)
+        ↓
+Mapper
+        ↓
+EF Entities (tbook, tauthor, tpublishingcompany)
+        ↓
+SQLite
+```
+
+---
+
+## Prerequisites
+
+- .NET SDK 9.x (project target: `net9.0`)
+- Postman (for request testing)
+- Local development HTTPS certificate trusted (recommended)
+
+Trust HTTPS certificate:
+
+```bash
+dotnet dev-certs https --trust
+```
+
+---
+
+To use this SOAP API start in the project folder `SOAPAuthorAPI`
+
+- Start in projectfolder **API-s**, then in the terminal write
+      `cd SOAPAuthorAPI`
+
 ## Quick Start
 
 1. Restore packages:
@@ -28,6 +63,8 @@ SOAP API for managing books, authors, and publishing companies.
    https://localhost:7133/soap
    ```
 
+---
+
 ## Postman
 
 1. Import collection file:
@@ -41,6 +78,8 @@ SOAP API for managing books, authors, and publishing companies.
    ```text
    https://localhost:7133/soap
    ```
+
+See examples of postman requests, import the Postman collection from this [Postman file](postman/Library%20SOAP%20API.postman_collection_updated.json) into postman, and try them out. It is also possible to read more in the full documentation.
 
 ## Full Documentation
 
