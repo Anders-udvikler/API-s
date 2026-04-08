@@ -8,7 +8,7 @@ namespace Library.SoapApi.Db.Entities
     [Index(nameof(nAuthorID), Name = "idx_tbook_IDX_BOOK_AUTHOR_ID")]
     [Index(nameof(nPublishingCompanyID), Name = "idx_tbook_IDX_BOOK_PUBLISHING_COMPANY_ID")]
     [Table("tbook")]
-    public class tbook
+    public class Book
     {
         [Key]
         public int nBookID { get; set; }
@@ -16,7 +16,7 @@ namespace Library.SoapApi.Db.Entities
         [Required]
         [StringLength(255)]
         [Column(TypeName = "varchar(255)")]
-        public string cTitle { get; set; }
+        public string cTitle { get; set; } = "Unknown";
 
         public int nAuthorID { get; set; }
 

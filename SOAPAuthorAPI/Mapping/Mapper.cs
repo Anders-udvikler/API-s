@@ -5,35 +5,35 @@ namespace Library.SoapApi.Mapping
 {
     public static class Mapper
     {
-        public static BookDto ToDto(tbook b) => new BookDto
+        public static BookDto ToDto(Book b) => new BookDto
         {
             Id = b.nBookID,
-            Title = b.cTitle,
+            Title = string.IsNullOrWhiteSpace(b.cTitle) ? "Unknown Title" : b.cTitle,
             AuthorId = b.nAuthorID,
             PublishingCompanyId = b.nPublishingCompanyID,
-            PublishingYear = b.nPublishingYear.HasValue ? decimal.ToInt32(b.nPublishingYear.Value) : null
+            PublishingYear = b.nPublishingYear.HasValue ? decimal.ToInt32(b.nPublishingYear.Value) : 1900
         };
 
-        public static tbook ToEntity(BookDto b) => new tbook
+        public static Book ToEntity(BookDto b) => new Book
         {
             nBookID = b.Id,
             cTitle = b.Title,
             nAuthorID = b.AuthorId,
             nPublishingCompanyID = b.PublishingCompanyId,
-            nPublishingYear = b.PublishingYear.HasValue ? b.PublishingYear.Value : null
+            nPublishingYear = b.PublishingYear
         };
 
-        public static AuthorDto ToDto(tauthor a) => new AuthorDto
+        public static AuthorDto ToDto(Author a) => new AuthorDto
         {
             Id = a.nAuthorID,
-            Name = a.cName,
-            Surname = a.cSurname
+            Name = string.IsNullOrWhiteSpace(a.cName) ? "Unknown" : a.cName,
+            Surname = string.IsNullOrWhiteSpace(a.cSurname) ? "Unknown" : a.cSurname
         };
 
-        public static PublishingCompanyDto ToDto(tpublishingcompany c) => new PublishingCompanyDto
+        public static PublishingCompanyDto ToDto(Publishingcompany c) => new PublishingCompanyDto
         {
             Id = c.nPublishingCompanyID,
-            Name = c.cName
+            Name = string.IsNullOrWhiteSpace(c.cName) ? "Unknown" : c.cName
         };
     }
 }

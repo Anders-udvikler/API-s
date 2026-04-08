@@ -36,6 +36,8 @@ dotnet dev-certs https --trust
 
 ## Quick Start
 
+In any terminal run:
+
 1. Restore packages:
 
    ```bash
@@ -48,19 +50,21 @@ dotnet dev-certs https --trust
    dotnet build Library.SoapApi.csproj
    ```
 
-1. Run API:
+1. Run API: (defaulting to http)
 
    ```bash
    dotnet run --project Library.SoapApi.csproj
    ```
 
-   - Or HTTPS profile:
+   - Or HTTPS profile specifically:
 
    ```bash
    dotnet run --launch-profile https --project Library.SoapApi.csproj
    ```
 
-1. SOAP endpoint:
+In Postman or a browser check:
+
+- SOAP endpoint:
 
    ```text
    https://localhost:7133/soap
@@ -86,14 +90,14 @@ Note:
 
 Tip:
 
-- If your host/port differs, update request URL from `https://localhost:7133/soap`.
+- If your host/port differs, update your request URL `https://localhost:7133/soap`.
 
 ### Manual Setup in Postman
 
 Endpoint:
 
 ```text
-POST https://localhost:7133/soap
+POST | https://localhost:7133/soap
 ```
 
 Headers:

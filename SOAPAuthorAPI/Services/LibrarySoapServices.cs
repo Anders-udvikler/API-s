@@ -27,6 +27,27 @@ namespace Library.SoapApi.Services
                 new ConflictFault { Message = message },
                 new FaultReason(message));
 
+        private void ValidateBookReferences(int authorId, int publishingCompanyId)
+        {
+            if (!_db.tauthor.Any(a => a.nAuthorID == authorId))
+            {
+                throw ValidationFault("Author does not exist");
+            }
+
+            if (!_db.tpublishingcompany.Any(c => c.nPublishingCompanyID == publishingCompanyId))
+            {
+                throw ValidationFault("Publishing company does not exist");
+            }
+        }
+
+        private static void ValidatePublishingYearValue(int publishingYear)
+        {
+            if (publishingYear < 1900)
+            {
+                throw ValidationFault("Publishing year must be >= 1900");
+            }
+        }
+
         public LibrarySoapService(AppDbContext db)
         {
             _db = db;
@@ -41,12 +62,11 @@ namespace Library.SoapApi.Services
                 throw ValidationFault("Title is required");
             }
 
-            if (publishingYear < 1900)
-            {
-                throw ValidationFault("Publishing year must be >= 1900");
-            }
+            ValidatePublishingYearValue(publishingYear);
 
-            var book = new tbook
+            ValidateBookReferences(authorId, publishingCompanyId);
+
+            var book = new Book
             {
                 cTitle = title,
                 nAuthorID = authorId,
@@ -86,10 +106,9 @@ namespace Library.SoapApi.Services
                 throw ValidationFault("Invalid book data");
             }
 
-            if (book.PublishingYear < 1900)
-            {
-                throw ValidationFault("Publishing year must be >= 1900");
-            }
+            ValidatePublishingYearValue(book.PublishingYear);
+
+            ValidateBookReferences(book.AuthorId, book.PublishingCompanyId);
 
             var existing = _db.tbook.FirstOrDefault(b => b.nBookID == book.Id);
 
@@ -101,7 +120,7 @@ namespace Library.SoapApi.Services
             existing.cTitle = book.Title;
             existing.nAuthorID = book.AuthorId;
             existing.nPublishingCompanyID = book.PublishingCompanyId;
-            existing.nPublishingYear = book.PublishingYear.HasValue ? book.PublishingYear.Value : null;
+            existing.nPublishingYear = book.PublishingYear;
 
             _db.SaveChanges();
 
@@ -132,7 +151,7 @@ namespace Library.SoapApi.Services
                 throw ValidationFault("Name and surname are required");
             }
 
-            var author = new tauthor
+            var author = new Author
             {
                 cName = name,
                 cSurname = surname
@@ -216,7 +235,7 @@ namespace Library.SoapApi.Services
                 throw ValidationFault("Name is required");
             }
 
-            var company = new tpublishingcompany
+            var company = new Publishingcompany
             {
                 cName = name
             };

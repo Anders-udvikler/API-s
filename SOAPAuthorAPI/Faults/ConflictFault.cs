@@ -6,6 +6,6 @@ namespace Library.SoapApi.Faults
     public class ConflictFault
     {
         [DataMember]
-        public string Message { get; set; }
+        public string Message { get; set; } = "Conflict detected";
     }
 }

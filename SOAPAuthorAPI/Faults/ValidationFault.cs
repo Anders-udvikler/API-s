@@ -6,6 +6,6 @@ namespace Library.SoapApi.Faults
     public class ValidationFault
     {
         [DataMember]
-        public string Message { get; set; }
+        public string Message { get; set; } = "Validation error";
     }
 }

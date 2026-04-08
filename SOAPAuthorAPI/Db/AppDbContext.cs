@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
 {
-    public DbSet<tbook> tbook { get; set; }
-    public DbSet<tauthor> tauthor { get; set; }
-    public DbSet<tpublishingcompany> tpublishingcompany { get; set; }
+    public DbSet<Book> tbook { get; set; }
+    public DbSet<Author> tauthor { get; set; }
+    public DbSet<Publishingcompany> tpublishingcompany { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)

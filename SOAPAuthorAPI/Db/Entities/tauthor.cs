@@ -5,7 +5,7 @@ namespace Library.SoapApi.Db.Entities
 {
     [Table("tauthor")]
 
-    public class tauthor
+    public class Author
     {
         [Key]
         public int nAuthorID { get; set; }
@@ -13,7 +13,7 @@ namespace Library.SoapApi.Db.Entities
         [Required]
         [StringLength(40)]
         [Column(TypeName = "varchar(40)")]
-        public string cName { get; set; }
+        public string cName { get; set; } = "Unknown";
 
         [StringLength(60)]
         [Column(TypeName = "varchar(60)")]
