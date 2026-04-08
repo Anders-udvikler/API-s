@@ -4,19 +4,19 @@ namespace Library.SoapApi.Models
     [DataContract(Name = "Book")]
     public class BookDto
     {
-        [DataMember(Name = "id", Order = 1)]
-        public int Id { get; set; }
-        
-        [DataMember(Name = "title", Order = 2, IsRequired = true)]
-        public required string Title { get; set; }
-        
-        [DataMember(Name = "authorId", Order = 3)]
+        [DataMember(Name = "AuthorId", Order = 1)]
         public int AuthorId { get; set; }
         
-        [DataMember(Name = "publishingCompanyId", Order = 4)]
+        [DataMember(Name = "Id", Order = 2)]
+        public int Id { get; set; }
+        
+        [DataMember(Name = "PublishingCompanyId", Order = 3)]
         public int PublishingCompanyId { get; set; }
         
-        [DataMember(Name = "publishingYear", Order = 5)]
+        [DataMember(Name = "PublishingYear", Order = 4)]
         public int PublishingYear { get; set; }
+        
+        [DataMember(Name = "Title", Order = 5, IsRequired = true)]
+        public required string Title { get; set; }
     }
 }
