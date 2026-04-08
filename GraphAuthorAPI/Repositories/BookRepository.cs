@@ -1,17 +1,17 @@
 using Auhtors;
 using Books;
-using Microsoft.Data.SqlClient;
+using MySqlConnector;
 
 namespace BooksRepo
 {
     public class BookRepo
     {
-        string querygetall = "select * from books";
-        string querygetid = "select * from books where Id = @Id";
-        string querygetAdd = "insert into books (Id, Title, AuthorId, PublishingCompanyId, Publishingyear) values (@Id, @Title, @AuthorId, @PublishingCompanyId, @Publishingyear)";
-        string querygetDelete = "delete from books where Id = @Id";
+        string querygetall = "select idbook, Name, AuthorId, PublishingCompanyId, Publishingyear from Book";
+        string querygetid = "select idbook, Name, AuthorId, PublishingCompanyId, Publishingyear from Book where idbook = @Id";
+        string querygetAdd = "insert into Book (Id, Name, AuthorId, PublishingCompanyId, Publishingyear) values (@Id, @Name, @AuthorId, @PublishingCompanyId, @Publishingyear)";
+        string querygetDelete = "delete from Book where Id = @Id";
 
-        string querygetUpdate = "update books set Title = @Title, AuthorId = @AuthorId, PublishingCompanyId = @PublishingCompanyId, Publishingyear = @Publishingyear where Id = @Id";
+        string querygetUpdate = "update Book set Name = @Name, AuthorId = @AuthorId, PublishingCompanyId = @PublishingCompanyId, Publishingyear = @Publishingyear where Id = @Id";
 
         private readonly string _connectionString;
 
@@ -20,22 +20,22 @@ namespace BooksRepo
             _connectionString = connectionString;
         }
 
-        public Book GetBookRepoById(int id)
+        public async Task<Book?> GetBookRepoById(int id)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(_connectionString))
             {
-                connection.Open();
-                using (var command = new SqlCommand(querygetid, connection))
+                await connection.OpenAsync();
+                using (var command = new MySqlCommand(querygetid, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new Book
                             {
-                                Id = (int)reader["Id"],
-                                Title = reader["Title"].ToString(),
+                                Id = (int)reader["idbook"],
+                                Title = reader["Name"].ToString(),
                                 AuthorId = (int)reader["AuthorId"],
                                 PublishingCompanyId = (int)reader["PublishingCompanyId"],
                                 Publishingyear = (int)reader["Publishingyear"]
@@ -47,26 +47,26 @@ namespace BooksRepo
             }
         }
 
-        public Book AddBook(Book book)
+        public async Task<Book> AddBook(Book book)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(_connectionString))
             {
-                connection.Open();
-                using (var command = new SqlCommand(querygetAdd, connection))
+                await connection.OpenAsync();
+                using (var command = new MySqlCommand(querygetAdd, connection))
                 {
                     command.Parameters.AddWithValue("@Id", book.Id);
                     command.Parameters.AddWithValue("@Title", book.Title);
                     command.Parameters.AddWithValue("@AuthorId", book.AuthorId);
                     command.Parameters.AddWithValue("@PublishingCompanyId", book.PublishingCompanyId);
                     command.Parameters.AddWithValue("@Publishingyear", book.Publishingyear);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new Book
                             {
-                                Id = (int)reader["Id"],
-                                Title = reader["Title"].ToString(),
+                                Id = (int)reader["idbook"],
+                                Title = reader["Name"].ToString(),
                                 AuthorId = (int)reader["AuthorId"],
                                 PublishingCompanyId = (int)reader["PublishingCompanyId"],
                                 Publishingyear = (int)reader["Publishingyear"]
@@ -79,26 +79,26 @@ namespace BooksRepo
         }
     }
 
-        public Book UpdateBook(Book book, int id)
+        public async Task<Book> UpdateBook(Book book, int id)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(_connectionString))
             {
-                connection.Open();
-                using (var command = new SqlCommand(querygetUpdate, connection))
+                await connection.OpenAsync();
+                using (var command = new MySqlCommand(querygetUpdate, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     command.Parameters.AddWithValue("@Title", book.Title);
                     command.Parameters.AddWithValue("@AuthorId", book.AuthorId);
                     command.Parameters.AddWithValue("@PublishingCompanyId", book.PublishingCompanyId);
                     command.Parameters.AddWithValue("@Publishingyear", book.Publishingyear);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new Book
                             {
-                                Id = (int)reader["Id"],
-                                Title = reader["Title"].ToString(),
+                                Id = (int)reader["idbook"],
+                                Title = reader["Name"].ToString(),
                                 AuthorId = (int)reader["AuthorId"],
                                 PublishingCompanyId = (int)reader["PublishingCompanyId"],
                                 Publishingyear = (int)reader["Publishingyear"]
@@ -110,46 +110,58 @@ namespace BooksRepo
         }
     }
 
-        public async Task DeleteAuthor(int id)
+        public async Task<Book> DeleteBook(int id)
         {
 
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(_connectionString))
             {
-                connection.Open();
-                using (var command = new SqlCommand(querygetid, connection))
+                using (var command = new MySqlCommand(querygetDelete, connection))
                 {
+                    await connection.OpenAsync();
                     command.Parameters.AddWithValue("@Id", id);
-                    command.Parameters.AddWithValue("@Id", id);
-                    command.Parameters.AddWithValue("@Id", id);
-                    await command.ExecuteNonQueryAsync();
-                }
-           }
-        }
-
-        public Book GetBooksById(int id)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                using (var command = new SqlCommand(querygetid, connection))
-                {
-                    command.Parameters.AddWithValue("@Id", id);
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
                             return new Book
                             {
-                                Id = (int)reader["Id"],
-                                Title = reader["Title"].ToString(),
+                                Id = (int)reader["idbook"],
+                                Title = reader["Name"].ToString(),
                                 AuthorId = (int)reader["AuthorId"],
                                 PublishingCompanyId = (int)reader["PublishingCompanyId"],
                                 Publishingyear = (int)reader["Publishingyear"]
                             };
                         }
                     }
+                    return null;
                 }
-                return null;
+           }
+        }
+
+        public async Task<List<Book>> GetBooks()
+        {
+            var books = new List<Book>();
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (var command = new MySqlCommand(querygetall, connection))
+                {
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            books.Add(new Book
+                            {
+                                Id = (int)reader["idbook"],
+                                Title = reader["Name"].ToString(),
+                                AuthorId = (int)reader["AuthorId"],
+                                PublishingCompanyId = (int)reader["PublishingCompanyId"],
+                                Publishingyear = (int)reader["Publishingyear"]
+                            });
+                        }
+                    }
+                }
+                return books;
             }
         }
 }

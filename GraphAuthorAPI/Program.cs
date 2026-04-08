@@ -1,8 +1,36 @@
+using authorquery;
+using AuthorsRepo;
+using BooksRepo;
+using publishRepo;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddGraphQLServer()
+    .AddQueryType<publishingquery>()
+    .AddMutationType<publishingmutation.publishingmutation>();
+
+builder.Services.AddScoped<AuthorRepo>(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    var connectionString = config.GetConnectionString("DefaultConnection");
+    return new AuthorRepo(connectionString);
+});
+builder.Services.AddScoped<BookRepo>(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    var connectionString = config.GetConnectionString("DefaultConnection");
+    return new BookRepo(connectionString);
+});
+builder.Services.AddScoped<publishRepo.publishRepo>(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    var connectionString = config.GetConnectionString("DefaultConnection");
+    return new publishRepo.publishRepo(connectionString);
+});
 
 var app = builder.Build();
 
@@ -14,28 +42,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapGraphQL("/graphql");
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
