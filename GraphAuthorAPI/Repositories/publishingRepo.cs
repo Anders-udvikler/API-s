@@ -1,16 +1,16 @@
 using Microsoft.Data.SqlClient;
-using MySqlConnector;
+using Microsoft.Data.Sqlite;    
 using publishingcompanies;
 
 namespace publishRepo
 {
     public class publishRepo
     {
-        string querygetall = "select idpublishing,name from publishingcompanies";
-        string querygetid = "select idpublishing,name from publishingcompanies where idpublishing = @Id";
-        string querygetAdd = "insert into publishingcompanies (idpublishing, name) values (@Id, @Name)";
-        string querygetDelete = "delete from publishingcompanies where idpublishing = @Id";
-        string querygetUpdate = "update publishingcompanies set Name = @Name where idpublishing = @Id";
+        string querygetall = "select nPublishingCompanyID, cName from tpublishingcompany";
+        string querygetid = "select nPublishingCompanyID, cName from tpublishingcompany where nPublishingCompanyID = @Id";
+        string querygetAdd = "insert into tpublishingcompany (nPublishingCompanyID, cName) values (@Id, @Name)";
+        string querygetDelete = "delete from tpublishingcompany where nPublishingCompanyID = @Id";
+        string querygetUpdate = "update tpublishingcompany set cName = @Name where nPublishingCompanyID = @Id";
 
         private readonly string _connectionString;
 
@@ -23,10 +23,10 @@ namespace publishRepo
         {
             try
             {
-                using (var connection = new MySqlConnection(_connectionString))
+                using (var connection = new SqliteConnection(_connectionString))
                 {
                     await connection.OpenAsync();
-                    using (var command = new MySqlCommand(querygetid, connection))
+                    using (var command = new SqliteCommand(querygetid, connection))
                     {
                         command.Parameters.AddWithValue("@Id", id);
                         using (var reader = await command.ExecuteReaderAsync())
@@ -35,8 +35,8 @@ namespace publishRepo
                             {
                                 return new publishingcompany
                                 {
-                                    Id = (int)reader["idpublishing"],
-                                    Name = reader["name"].ToString()
+                                    Id = Convert.ToInt32(reader["nPublishingCompanyID"]),
+                                    Name = Convert.ToString(reader["cName"])
                                 };
                             }
                         }
@@ -61,23 +61,20 @@ namespace publishRepo
         {
             try
             {
-                using (var connection = new MySqlConnection(_connectionString))
+                using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetAdd, connection))
+                using (var command = new SqliteCommand(querygetAdd, connection))
                 {
                     command.Parameters.AddWithValue("@Id", company.Id);
                     command.Parameters.AddWithValue("@Name", company.Name);
                     using (var reader = await command.ExecuteReaderAsync())
                     {
-                        if (await reader.ReadAsync())
-                        {
                             return new publishingcompany
                             {
                                 Id = company.Id,
                                 Name = company.Name
                             };
-                        }
                     }
                     return null;
                 }}
@@ -101,10 +98,10 @@ namespace publishRepo
         {
             try
             {
-                            using (var connection = new MySqlConnection(_connectionString))
+                            using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetUpdate, connection))
+                using (var command = new SqliteCommand(querygetUpdate, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     command.Parameters.AddWithValue("@Name", company.Name);
@@ -138,10 +135,10 @@ namespace publishRepo
         {
             try
             {
-                            using (var connection = new MySqlConnection(_connectionString))
+                            using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetDelete, connection))
+                using (var command = new SqliteCommand(querygetDelete, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     await command.ExecuteNonQueryAsync();
@@ -169,10 +166,10 @@ namespace publishRepo
         {
             try
             {
-                            using (var connection = new MySqlConnection(_connectionString))
+                            using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetall, connection))
+                using (var command = new SqliteCommand(querygetall, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
                     {
@@ -181,8 +178,8 @@ namespace publishRepo
                         {
                             companies.Add(new publishingcompany
                             {
-                                Id = (int)reader["idpublishing"],
-                                Name = reader["name"].ToString()
+                                Id = Convert.ToInt32(reader["nPublishingCompanyID"]),
+                                Name = Convert.ToString(reader["cName"])
                             });
                         }
                         return companies;

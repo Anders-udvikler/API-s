@@ -6,11 +6,11 @@ using Microsoft.Data.SqlClient;
 using publishingcompanies;
 using publishRepo;
 
-namespace authorquery
+namespace query
 {
-    public class publishingquery
+    public class query
     {
-        public async Task<List<publishingcompany>> GetAllPublishingCompanies(
+        public async Task<List<publishingcompany?>?> GetAllPublishingCompanies(
         [Service] publishRepo.publishRepo repo)
     {
         try
@@ -94,7 +94,7 @@ namespace authorquery
         }
     }
 
-            public async Task<List<Book>> GetAllBooks(
+            public async Task<List<Book?>?> GetAllBooks(
         [Service] BookRepo  repo)
     {
         try

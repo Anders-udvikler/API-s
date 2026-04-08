@@ -9,7 +9,7 @@ namespace publishingmutation
 {
     public class publishingmutation
     {
-        public async Task<publishingcompany> AddPublishingCompany( publishingcompany publishingCompany,
+        public async Task<publishingcompany?> AddPublishingCompany( publishingcompany publishingCompany,
         [Service] publishRepo.publishRepo repo)
     {
         try
@@ -17,14 +17,12 @@ namespace publishingmutation
             publishingcompany company = await repo.AddPublishingCompany(publishingCompany);
             return company;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            // Log the exception (you can use a logging framework here)
-            Console.WriteLine($"An error occurred: {ex.Message}");
             return null;
         }
     }
-      public async Task<publishingcompany> UpdatePublishingCompany(
+      public async Task<publishingcompany?> UpdatePublishingCompany(
         int id, publishingcompany publishingcompany,
         [Service] publishRepo.publishRepo repo)
         {
@@ -35,8 +33,6 @@ namespace publishingmutation
             }
             catch(SqlException )
             {
-                // Log the exception (you can use a logging framework here)
-                Console.WriteLine($"An error occurred: {id} does not exist in the database");
                 return null;
             }
              catch (Exception ex)
@@ -47,7 +43,7 @@ namespace publishingmutation
             }
         }
     
-        public async Task<publishingcompany> DeletePublishingCompany(int id,
+        public async Task<publishingcompany?> DeletePublishingCompany(int id,
         [Service] publishRepo.publishRepo repo)
         {
             try
@@ -70,13 +66,13 @@ namespace publishingmutation
             
         }
 
-                public async Task<Author> AddAuthor(Author au,
+                public async Task<Author?> AddAuthor(Author au,
         [Service] AuthorRepo repo)
     {
         Author author = await repo.AddAuthor(au);
         return author;
     }
-      public async Task<Author> UpdateAuthor(
+      public async Task<Author?> UpdateAuthor(
         int id, Author author,
         [Service] AuthorRepo repo)
         {
@@ -100,7 +96,7 @@ namespace publishingmutation
             
         }
     
-        public async Task<Author> DeleteAuthor(int id,
+        public async Task<Author?> DeleteAuthor(int id,
         [Service] AuthorRepo repo)
         {
             try
@@ -123,7 +119,7 @@ namespace publishingmutation
             
         }
 
-                public async Task<Book> AddBook( Book book,
+                public async Task<Book?> AddBook( Book book,
         [Service] BookRepo repo)
     {
         try
@@ -144,7 +140,7 @@ namespace publishingmutation
             return null;
         }
     }
-      public async Task<Book> UpdateBook(
+      public async Task<Book?> UpdateBook(
         int id, Book book,
         [Service] BookRepo repo)
         {
@@ -155,19 +151,15 @@ namespace publishingmutation
             }
             catch(SqlException)
             {
-                // Log the exception (you can use a logging framework here)
-                Console.WriteLine($"An error occurred: {id} does not exist in the database");
                 return null;
             }
-             catch (Exception ex)
+             catch (Exception)
             {
-                // Log the exception (you can use a logging framework here)
-                Console.WriteLine($"An error occurred: {ex.Message}");
                 return null;
             }
         }
     
-        public async Task<Book> DeleteBook(int id,
+        public async Task<Book?> DeleteBook(int id,
         [Service] BookRepo repo)
         {
             try
@@ -175,7 +167,7 @@ namespace publishingmutation
                 Book deletedBook = await repo.DeleteBook(id);
                 return deletedBook;
             }
-            catch(SqlException sql)
+            catch(SqlException)
             
             {
                 // Log the exception (you can use a logging framework here)

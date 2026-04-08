@@ -1,16 +1,15 @@
 using Auhtors;
 using Microsoft.Data.SqlClient;
-using MySqlConnector;
-
+using Microsoft.Data.Sqlite;
 namespace AuthorsRepo
 {
     public class AuthorRepo
     {
-        string querygetall = "select Id, Name, Surname from Author";
-        string querygetid = "select * from Author where Id = @Id";
-        string querygetAdd = "insert into Author (Id, Name, Surname) values (@Id, @Name, @Surname)";
-        string querygetDelete = "delete from Author where Id = @Id";
-        string querygetUpdate = "update Author set Name = @Name, Surname = @Surname where Id = @Id";
+        string querygetall = "select nAuthorID, cName, cSurname from tauthor";
+        string querygetid = "select * from tauthor where nAuthorID = @Id";
+        string querygetAdd = "insert into tauthor (nAuthorID, cName, cSurname) values (@Id, @Name, @Surname)";
+        string querygetDelete = "delete from tauthor where nAuthorID = @Id";
+        string querygetUpdate = "update tauthor set cName = @Name, cSurname = @Surname where nAuthorID = @Id";
 
         private readonly string _connectionString;
 
@@ -21,10 +20,10 @@ namespace AuthorsRepo
 
         public async Task<Author?> GetAuthorRepoById(int id)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetid, connection))
+                using (var command = new SqliteCommand(querygetid, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     using (var reader = await command.ExecuteReaderAsync())
@@ -33,9 +32,9 @@ namespace AuthorsRepo
                         {
                             return new Author
                             {
-                                Id = (int)reader["Id"],
-                                Name = reader["Name"].ToString(),
-                                Surname = reader["Surname"].ToString()
+                                Id = Convert.ToInt32(reader["nAuthorID"]),
+                                Name = Convert.ToString(reader["cName"]),
+                                Surname = Convert.ToString(reader["cSurname"])
                             };
                         }
                     }
@@ -48,10 +47,10 @@ namespace AuthorsRepo
         {
             try
             {
-                            using (var connection = new MySqlConnection(_connectionString))
+                            using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetAdd, connection))
+                using (var command = new SqliteCommand(querygetAdd, connection))
                 {
                     command.Parameters.AddWithValue("@Id", author.Id);
                     command.Parameters.AddWithValue("@Name", author.Name);
@@ -67,7 +66,6 @@ namespace AuthorsRepo
                     }
                 }
             }
-            return null;
             }
             catch (SqlException)
             {
@@ -87,10 +85,10 @@ namespace AuthorsRepo
         {
             try
             {
-                 using (var connection = new MySqlConnection(_connectionString))
+                 using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetUpdate, connection))
+                using (var command = new SqliteCommand(querygetUpdate, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     command.Parameters.AddWithValue("@Name", author.Name);
@@ -105,8 +103,6 @@ namespace AuthorsRepo
                             };
                     }
                 }
-                return null;
-                
             }}
             catch(SqlException)
             {
@@ -126,10 +122,10 @@ namespace AuthorsRepo
         {
             try
             { 
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new SqliteConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                using (var command = new MySqlCommand(querygetDelete, connection))
+                using (var command = new SqliteCommand(querygetDelete, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     await command.ExecuteNonQueryAsync();
@@ -164,10 +160,10 @@ namespace AuthorsRepo
             try
             {
                 var authors = new List<Author>();
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new SqliteConnection(_connectionString))
             {
-                connection.Open();
-                using (var command = new MySqlCommand(querygetall, connection))
+                await connection.OpenAsync();
+                using (var command = new SqliteCommand(querygetall, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
                     {
@@ -175,9 +171,9 @@ namespace AuthorsRepo
                         {
                             authors.Add(new Author
                             {
-                                Id = (int)reader["Id"],
-                                Name = reader["Name"].ToString(),
-                                Surname = reader["Surname"].ToString()
+                                Id = Convert.ToInt32(reader["nAuthorID"]),
+                                Name = Convert.ToString(reader["cName"]),
+                                Surname = Convert.ToString(reader["cSurname"])
                             });
                         }
                     }
