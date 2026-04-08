@@ -1,0 +1,6 @@
+@SOAPAuthorAPI_HostAddress = http://localhost:5278
+
+GET {{SOAPAuthorAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

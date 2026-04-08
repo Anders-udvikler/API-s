@@ -1,5 +1,4 @@
 using Auhtors;
-using Microsoft.Data.SqlClient;
 using MySqlConnector;
 
 namespace AuthorsRepo
@@ -46,9 +45,7 @@ namespace AuthorsRepo
 
         public async Task<Author?> AddAuthor(Author author)
         {
-            try
-            {
-                            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 using (var command = new MySqlCommand(querygetAdd, connection))
@@ -56,38 +53,28 @@ namespace AuthorsRepo
                     command.Parameters.AddWithValue("@Id", author.Id);
                     command.Parameters.AddWithValue("@Name", author.Name);
                     command.Parameters.AddWithValue("@Surname", author.Surname);
+                    command.ExecuteNonQuery();
                     using (var reader = await command.ExecuteReaderAsync())
                     {
+                        if (await reader.ReadAsync())
+                        {
                             return new Author
                             {
-                                Id = author.Id,
-                                Name = author.Name,
-                                Surname = author.Surname
+                                Id = (int)reader["Id"],
+                                Name = reader["Name"].ToString(),
+                                Surname = reader["Surname"].ToString()
                             };
+                        }
                     }
                 }
-            }
-            return null;
-            }
-            catch (SqlException)
-            {
-                // Handle SQL exceptions (e.g., connection issues, query errors)
-                Console.WriteLine("A database error occurred while adding the author.");
-                throw; // Re-throw the exception after logging it
-            }
-             catch (Exception ex)
-            {
-                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                throw; // Re-throw the exception after logging it
-            }
+                return null;
+            
+        }
     }
 
         public async Task<Author?> UpdateAuthor(Author author, int id)
         {
-            try
-            {
-                 using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = new MySqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
                 using (var command = new MySqlCommand(querygetUpdate, connection))
@@ -95,37 +82,27 @@ namespace AuthorsRepo
                     command.Parameters.AddWithValue("@Id", id);
                     command.Parameters.AddWithValue("@Name", author.Name);
                     command.Parameters.AddWithValue("@Surname", author.Surname);
-                    using ( var reader = await command.ExecuteReaderAsync())
+                    var reader = await command.ExecuteReaderAsync();
+                    using ( reader = await command.ExecuteReaderAsync())
                     {
+                        if (await reader.ReadAsync())
+                        {
                             return new Author
                             {
-                                Id =id,
-                                Name =author.Name,
-                                Surname = author.Surname
+                                Id = (int)reader["Id"],
+                                Name = reader["Name"].ToString(),
+                                Surname = reader["Surname"].ToString()
                             };
+                        }
                     }
                 }
                 return null;
-                
-            }}
-            catch(SqlException)
-            {
-                // Handle SQL exceptions (e.g., connection issues, query errors)
-                Console.WriteLine("A database error occurred while updating the author.");
-                throw; // Re-throw the exception after logging it
-            }
-             catch (Exception ex)
-            {
-                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                throw; // Re-throw the exception after logging it
-            }
         }
+    }
 
         public async Task<Author?> DeleteAuthor(int id)
         {
-            try
-            { 
+
             using (var connection = new MySqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
@@ -143,27 +120,11 @@ namespace AuthorsRepo
                 }
                 return null;
            }
-                
-            }
-            catch (SqlException)
-            {
-                // Handle SQL exceptions (e.g., connection issues, query errors)
-                Console.WriteLine("A database error occurred while deleting the author.");
-                throw; // Re-throw the exception after logging it
-            }
-             catch (Exception ex)
-            {
-                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                throw; // Re-throw the exception after logging it
-            }
         }
 
         public async Task<List<Author>> GetAuthors()
         {
-            try
-            {
-                var authors = new List<Author>();
+            var authors = new List<Author>();
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
@@ -183,19 +144,6 @@ namespace AuthorsRepo
                     }
                 }
                 return authors;
-            }
-            }
-            catch(SqlException)
-            {
-                // Handle SQL exceptions (e.g., connection issues, query errors)
-                Console.WriteLine("A database error occurred while retrieving authors.");
-                throw; // Re-throw the exception after logging it
-            }
-             catch (Exception ex)
-            {
-                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                throw; // Re-throw the exception after logging it
             }
         }
 }
