@@ -21,6 +21,13 @@ public class BookService : GrpcBooks.BookService.BookServiceBase
     {
         String sqlQuery = String.Format("Select * From Tbook Where nBookId = {0};", request.BookId);
         var result = SqLiteEntry.AccessDs(sqlQuery, null, null);
+
+        if (result == null || result.Count == 0)
+        {
+            throw new RpcException(
+                new Status(StatusCode.NotFound, $"Book with id {request.BookId} was not found")
+            );
+        }
         
         SqLiteEntry.BookDto bookResult = result[0];
         
