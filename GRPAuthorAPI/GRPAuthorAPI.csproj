@@ -20,4 +20,8 @@
     <Protobuf Include="Contracts/books.proto" GrpcServices="Server" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DataSources\" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,7 @@
 ﻿using GRPAuthorAPI.DSEntries;
 using Grpc.Core;
 using GrpcBooks;
+using ProtoBuf.WellKnownTypes;
 using Status = Grpc.Core.Status;
 
 namespace GRPAuthorAPI.Logic;
@@ -21,7 +22,13 @@ public class BookService : GrpcBooks.BookService.BookServiceBase
     {
         String sqlQuery = String.Format("Select * From Tbook Where nBookId = {0};", request.BookId);
         var result = SqLiteEntry.AccessDs(sqlQuery, null, null);
-        
+
+        if (result == null || result.Count == 0)
+        {
+            throw new RpcException(
+                new Status(StatusCode.NotFound, "Book not found")
+            );
+        }
         SqLiteEntry.BookDto bookResult = result[0];
         
         return new Book
@@ -38,6 +45,12 @@ public class BookService : GrpcBooks.BookService.BookServiceBase
         CreateBookRequest request,
         ServerCallContext context)
     {
+        if(request.Title ==""|| request.AuthorId == null || request.PublicationYear == null || request.PublisherId == null)
+        {
+            throw new RpcException(
+                new Status(StatusCode.InvalidArgument, "not Valid Book")
+            );
+        }
         
         String sqlQueryAddBook = String.Format("INSERT INTO Tbook (cTitle, nAuthorID, nPublishingYear, nPublishingCompanyID) " +
                                                "VALUES ('{0}', {1}, {2}, {3});", 
