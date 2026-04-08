@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GRPAuthorAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3b96df571d796f888e486bc57f02cdd034384fa2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6d80f8989e3403b9769eae176ffe3b90fcc087a6")]
 [assembly: System.Reflection.AssemblyProductAttribute("GRPAuthorAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GRPAuthorAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

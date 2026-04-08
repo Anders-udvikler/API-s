@@ -44,8 +44,7 @@ namespace publishingmutation
             return await repo.DeleteAuthor(id);
         }
 
-                public async Task<Book> AddBook(
-        int id, Book book,
+                public async Task<Book> AddBook( Book book,
         [Service] BookRepo repo)
     {
         return await repo.AddBook(book);
